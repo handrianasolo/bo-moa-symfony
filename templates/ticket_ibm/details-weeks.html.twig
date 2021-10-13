@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <!-- Details DataTable tickets IBM -->
+    <script src="{{ asset('dist/js/pages/ticket-ibm/details-ibm.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+		<!-- container-fluid -->
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h3 class="text-secondary">
+						<i class="fas fa-info-circle nav-icon"></i> Détails des tickets IBM ouverts
+					</h3>
+				</div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                      <li class="breadcrumb-item"><a href="{{path('ibm_upload')}}">Mise à jour</a></li>
+                      <li class="breadcrumb-item active">Détails des tickets IBM ouverts</li>
+                    </ol>
+                </div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+        <!-- Liste of all ticket -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-outline card-info">
+                    <div class="card-header d-flex">
+                        <h3 class="card-title m-auto">Détails des tickets IBM ouverts entre {{detailsTitle1}} et {{detailsTitle2}} jour(s)</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="tabticketsdetails" class="table display table-striped w-100">
+                            <thead>
+                                <tr role="row">
+                                    <th class="text-center">N° Incident</th>
+                                    <th class="text-center">Date d'affectation</th>
+                                    <th class="text-center">Sujet tâche</th>
+                                    <th class="text-center">Code magasin</th>
+                                    <th class="text-center">Nom magasin</th>
+                                    <th class="text-center">Type magasin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for details in detailsByWeeks %}
+                                <tr>
+                                    <td class="text-center">{{details.i_nIncident}}</td>
+                                    <td class="text-center">{{details.i_dateAffectation|date("d/m/Y")}}</td>
+                                    <td class="text-center">{{details.i_sujetTache}}</td>
+                                    <td class="text-center">{{details.i_codeMagasin}}</td>
+                                    <td class="text-center">{{details.i_nomMagasin}}</td>
+                                    <td class="text-center">{{details.i_typeMagasin}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <a class="btn btn-secondary" href="{{path('ibm_upload')}}" role="button">
+                            <i class="fas fa-arrow-circle-left"></i> Retour
+                        </a>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock %}

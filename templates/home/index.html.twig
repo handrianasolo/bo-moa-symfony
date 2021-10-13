@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+		<!-- container-fluid -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h3 class="text-secondary">
+						<i class="fas fa-home nav-icon"></i> Accueil
+					</h3>
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </div>
+    <!-- Main content -->
+    <div class="content">
+        <!-- tickets reseaux -->
+        <div class="container-fluid">
+            <div class="row">
+				<div class="col-12">
+					<h5 class="text-secondary">
+						<i class="fas fa-wifi nav-icon"></i> Tickets réseaux
+					</h5>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- opened tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if openedTickets|length > 0 %}
+                                                <h3>{{openedTickets|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets ouverts</p>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- treated tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if treatedTickets|length > 0 %}
+                                                <h3>{{treatedTickets|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets traités</p>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- closed tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if closedTickets|length > 0 %}
+                                                <h3>{{closedTickets|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets à clôturer</p>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tickets ibm -->
+        <div class="container-fluid">
+            <div class="row">
+				<div class="col-12">
+					<h5 class="text-secondary pull-right">
+						<i class="fas fa-ticket-alt nav-icon"></i> Tickets IBM
+					</h5>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- opened tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if impactHigh|length > 0 %}
+                                                <h3>{{impactHigh|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>  
+                                                <p class="txt-info">Impact élevé</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- treated tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if impactMedium|length > 0 %}
+                                                <h3>{{impactMedium|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>  
+                                                <p class="txt-info">Impact moyen</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- closed tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if impactLow|length > 0 %}
+                                                <h3>{{impactLow|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>  
+                                                <p class="txt-info">Impact faible</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- opened tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if urgenceHigh|length > 0 %}
+                                                <h3>{{urgenceHigh|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>  
+                                                <p class="txt-info">Urgence élevée</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- treated tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if urgenceMedium|length > 0 %}
+                                                <h3>{{urgenceMedium|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>
+                                                <p class="txt-info">Urgence moyenne</p>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- closed tickets -->
+                                <div class="col-lg-4">
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <div class="infos">
+                                                {% if urgenceLow|length > 0 %}
+                                                <h3>{{urgenceLow|length}}</h3>
+                                                {% else %}
+                                                <h3>0</h3>
+                                                {% endif %}
+                                                <p class="txt-info">Tickets non résolus</p>  
+                                                <p class="txt-info">Urgence faible</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock %}

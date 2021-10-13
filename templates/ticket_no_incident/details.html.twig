@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <!-- Comment no incidents -->
+    <script src="{{ asset('dist/js/pages/comment.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+		<!-- container-fluid -->
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h3 class="text-secondary">
+						<i class="fas fa-info-circle nav-icon"></i> Détails du magasin {{ticketNoIncident.codeMagasin}}
+					</h3>
+				</div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                      <li class="breadcrumb-item"><a href="{{path('reseau_manage')}}">Gestion des tickets</a></li>
+                      <li class="breadcrumb-item active">Détails du magasin {{ticketNoIncident.codeMagasin}}</li>
+                    </ol>
+                </div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-info">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Code magasin </label>
+                                    <input value="{{ticketNoIncident.codeMagasin}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nom magasin </label>
+                                    <input value="{{ticketNoIncident.nomMagasin}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Code géode </label>
+                                    <input value="{{ticketNoIncident.codeGeode}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Ville </label>
+                                    <input value="{{ticketNoIncident.ville}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>N° Kit-4G </label>
+                                    <input value="{{ticketNoIncident.nKit}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Date de mise en place</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketNoIncident.dateInstall is empty ? '' : ticketNoIncident.dateInstall|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Commentaire </label>
+                                <textarea class="col-md-12" rows="4" disabled>{{ticketNoIncident.commentaire}}</textarea>
+                                <a class="modal-comment btn btn-primary" href="#commentkit" data-target="{{path('no_incident_comment', {'id': ticketNoIncident.id})}}" data-toggle="modal" role="button">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <div id="commentkit" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Dernière mise à jour </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketNoIncident.dateMaj|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Etat </label>
+                                    <input value="{{ticketNoIncident.etat}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>ARS de récupération </label>
+                                    <input value="{{ticketNoIncident.arsRecup}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Date de récupération </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a class="btn btn-secondary" href="{{path('reseau_manage')}}" role="button">
+                                <i class="fas fa-arrow-circle-left"></i> Retour
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock %}

@@ -1,0 +1,21 @@
+<!-- modal to recuperate kit-4G to ticket -->
+{{form_start(recuperateForm, {'action': path('reseau_recuperate', {'id': ticketReseau.nTicket})})}}
+<div class="modal-header">
+    <h5 class="modal-title">Récupération du kit-4G au ticket n° <b>{{ticketReseau.nTicket}}</b></h5>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="form-label">Merci de saisir le n° ARS pour le ticket : </label>
+            {{form_widget(recuperateForm.arsRecup)}}
+            <span class="error text-danger">
+                {{form_errors(recuperateForm.arsRecup)}}
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer</button>
+</div>
+{{form_end(recuperateForm)}}

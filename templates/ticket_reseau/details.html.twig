@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <!-- Comment tickets Reseaux -->
+    <script src="{{ asset('dist/js/pages/comment.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h3 class="text-secondary">
+						<i class="fas fa-info-circle nav-icon"></i> Détails du ticket n° {{ticketReseau.nTicket}}
+					</h3>
+				</div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                      <li class="breadcrumb-item"><a href="{{path('reseau_manage')}}">Gestion des tickets</a></li>
+                      <li class="breadcrumb-item active">Détails du ticket n° {{ticketReseau.nTicket}}</li>
+                    </ol>
+                </div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-info">
+                        <!-- form start -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label>Ticket n°</label>
+                                    <input value="{{ticketReseau.nTicket}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Code incident</label>
+                                    <input value="{{ticketReseau.codeIncident}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Date de création</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketReseau.dateCreation|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label>Nom magasin</label>
+                                    <input value="{{ticketReseau.nomMagasin}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label>Code magasin</label>
+                                    <input value="{{ticketReseau.codeMagasin}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Type magasin</label>
+                                    <input value="{{ticketReseau.typeMagasin}}" class="form-control" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Maintneur</label>
+                                    <input value="{{ticketReseau.codeMaintneur}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label>Description</label>
+                                    <textarea class="col-md-12" rows="4" disabled>{{ticketReseau.description}}</textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Historique </label>
+                                    <textarea class="col-md-12" rows="4" disabled>{{ticketReseau.historique}}</textarea>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Commentaire </label>
+                                    <textarea class="col-md-12" rows="4" disabled>{{ticketReseau.commentaire}}</textarea>
+                                    <a class="modal-comment btn btn-primary" href="#commentkit" data-target="{{path('reseau_comment', {'id': ticketReseau.nTicket})}}" data-toggle="modal" role="button">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </a>
+                                    <div id="commentkit" class="modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Dernière mise à jour</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketReseau.dateMaj|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Etat</label>
+                                    <input value="{{ticketReseau.etatTicket}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Date d'installation</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketReseau.dateInstall is empty ? '' : ticketReseau.dateInstall|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>ARS installation</label>
+                                    <input value="{{ticketReseau.arsInstall}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Date de récupération</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input value="{{ticketReseau.dateArchive is empty ? '' : ticketReseau.dateArchive|date("d/m/Y")}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>ARS de récupération</label>
+                                    <input value="{{ticketReseau.arsRecup}}" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a class="btn btn-secondary" href="{{path('reseau_manage')}}" role="button">
+                                <i class="fas fa-arrow-circle-left"></i> Retour
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock %}

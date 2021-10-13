@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <!-- Datepicker configuration -->
+    <script src="{{ asset('dist/js/pages/datepicker.js')}}"></script>
+    <!-- Upload excel file -->
+    <script src="{{ asset('dist/js/pages/ticket-reseau/maj-reseau.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+		<!-- container-fluid -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h3 class="text-secondary">
+						<i class="fas fa-upload nav-icon"></i> Mettre à jour les tickets réseaux
+					</h3>
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="card card-container card-outline card-primary">
+                        <div class="card-header d-flex">
+                            <h3 class="card-title m-auto">Mise à jour</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <form method="post" id="excel-form">
+                                <label for="inputfile" class="text-center">Tickets Proxi Ouverts (Fichier Excel)</label>
+                                <input type="file" name="excel-file" id="excel-file">
+                            </form>
+                            <br/>
+                            <div id="excel-result"></div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="card card-container card-outline card-primary">
+                        <div class="card-header d-flex">
+                            <h3 class="card-title m-auto">Dernière mise à jour</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        {% if date(lastUpdatedDate[0]["maxDate"]) == "now"|date("d/m/Y") %}
+                        <div id="divMaj" class="card-body card-content bg-success d-flex">
+                            <h1 id="dateMaj" class="m-auto">
+                                <b>{{"now"|date("d/m/Y")}}</b>
+                            </h1>
+                        </div>
+                        {% else %}
+                        <div id="divMaj" class="card-body card-content bg-info d-flex">
+                            <h1 id="dateMaj" class="m-auto">
+                                <b>{{lastUpdatedDate[0]["maxDate"]}}</b>
+                            </h1>
+                        </div>
+                        {% endif %}
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+				<div class="col-12">
+					<h4 class="text-secondary">
+						<i class="fas fa-save nav-icon"></i> Enregistrement d'un magasin sans incident ( Kit-4G installé )
+					</h4>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_start(noIncidentForm) }}
+                    <div class="card card-success">
+                        <div class="card-header d-flex">
+                            <h3 class="card-title m-auto">Formulaire d'enregistrement</h3>
+                        </div>
+                        <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Nom du magasin</label>
+                                        {{form_widget(noIncidentForm.nomMagasin)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.nomMagasin)}}
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Code du magasin</label>
+                                        {{form_widget(noIncidentForm.codeMagasin)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.codeMagasin)}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Code géode</label>
+                                        {{form_widget(noIncidentForm.codeGeode)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.codeGeode)}}
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Ville</label>
+                                        {{form_widget(noIncidentForm.ville)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.ville)}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>N° Kit-4G</label>
+                                        {{form_widget(noIncidentForm.nKit)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.nKit)}}
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Date de mise en place</label>
+                                        <div class="input-group input-daterange">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                            </div>
+                                            {{form_widget(noIncidentForm.dateInstall)}}
+                                        </div>
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.dateInstall)}}
+                                        </span>
+                                    </div>
+                                </div>	
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label>Commentaire</label>
+                                        {{form_widget(noIncidentForm.commentaire)}}
+                                        <span class="error text-danger">
+                                            {{form_errors(noIncidentForm.commentaire)}}
+                                        </span>                                 
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="card-footer d-flex">
+                            <button type="submit" class="btn btn-success m-auto">
+                                <i class="fas fa-plus-circle"></i> Ajouter
+                            </button>
+                        </div>
+                        {{ form_rest(noIncidentForm) }}
+                    </div>
+                    {{ form_start(noIncidentForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock %}

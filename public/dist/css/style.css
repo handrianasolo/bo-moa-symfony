@@ -1,0 +1,65 @@
+.card-container {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.card-content {
+    height: 8em;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.six-days {
+    color: white;
+    background-color: #a50000; 
+}
+
+.five-days {
+    color: white;
+    background-color: orange;
+}
+
+.four-days {
+    background-color: gold; 
+    color: white;
+}
+
+.three-days {
+    background-color: rgb(136, 153, 101); 
+    color: white;
+}
+
+.two-days {
+    background-color: limegreen; 
+    color: white;
+}
+
+.yesterday {
+    background-color: green; 
+    color: white;
+}
+
+.three-weeks {
+    background-color: #7b170d; 
+    color: white;
+}
+
+.two-weeks {
+    background-color: #9a140c; 
+    color: white;
+}
+
+.one-week {
+    color: white;
+    background-color: #bb0b0b; 
+}
+
+.plus-month {
+    color: white;
+    background-color: #401409;
+}
+
+#excel-result {
+    max-height: 250px;
+    overflow: auto;
+}

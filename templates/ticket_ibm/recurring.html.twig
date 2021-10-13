@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h5 class="modal-title">Ticket n° : <strong>{{recurringTicketDetails[0].i_nIncident}}</strong></h5>
+</div>
+<div class="modal-body">
+    <table class="table display table-striped w-100">
+        <thead>
+            <tr role="row">
+                <th class="text-center">N° incident</th>
+                <th class="text-center">Date affectation</th>
+                <th class="text-center">Sujet tâche</th>
+                <th class="text-center">Code magasin</th>
+                <th class="text-center">Nom magasin</th>
+                <th class="text-center">Type magasin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for details in recurringTicketDetails %}
+            <tr role="row">
+                <td class="text-center">{{details.i_nIncident}}</td>
+                <td class="text-center">{{details.i_dateAffectation|date("d/m/Y")}}</td>
+                <td class="text-center">{{details.i_sujetTache}}</td>
+                <td class="text-center">{{details.i_codeMagasin}}</td>
+                <td class="text-center">{{details.i_nomMagasin}}</td>
+                <td class="text-center">{{details.i_typeMagasin}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+</div>

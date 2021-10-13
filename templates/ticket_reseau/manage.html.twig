@@ -1,0 +1,442 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <!-- Manage DataTable tickets Reseaux -->
+    <script src="{{ asset('dist/js/pages/ticket-reseau/manage-reseau.js')}}"></script>
+	<!-- Install ARS reseaux -->
+    <script src="{{ asset('dist/js/pages/ticket-reseau/install-reseau.js')}}"></script>
+	<!-- Recuperate ARS reseaux -->
+    <script src="{{ asset('dist/js/pages/ticket-reseau/recuperate-reseau.js')}}"></script>
+	<!-- Recuperate ARS no incidents -->
+    <script src="{{ asset('dist/js/pages/no-incident/recuperate-no-incident.js')}}"></script>
+	<!-- Recurring reseaux stores details -->
+    <script src="{{ asset('dist/js/pages/recurring.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+		<!-- container-fluid -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h3 class="text-secondary">
+						<i class="fas fa-tasks nav-icon"></i> Gestion des tickets réseaux
+					</h3>
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+		<!-- With incidents -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="text-secondary">
+						<i class="fas fa-code-branch nav-icon"></i> Avec incidents enregistrés
+					</h5>
+				</div>
+			</div>
+			<!-- Opened tickets -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card card-danger">
+						<div class="card-header">
+							<h3 class="card-title w-100">
+								<a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+									<center><strong>{{ openedTickets|length }} Tickets ouverts</strong></center>
+								</a>
+							</h3>
+						</div>
+						<div id="collapseOne" class="collapse show">
+							<div class="card-body">
+								<table id="tabticketouvert" class="table display table-striped w-100">
+									<thead>
+										<tr role="row">
+											<th class="text-center">N° Ticket</th>
+											<th class="text-center">Code incident</th>
+											<th class="text-center">Date d'ouverture (Depuis)</th>
+											<th class="text-center">Code magasin</th>
+											<th class="text-center">Nom magasin</th>
+											<th class="text-center">Détails</th>
+											<th class="text-center">Action</th>
+											<th class="text-center">Type magasin</th>
+											<th class="text-center">Code maintneur</th>
+											<th class="text-center">Description</th>
+											<th class="text-center">Historique</th>
+											<th class="text-center">Etat ticket</th>
+											<th class="text-center">Date d'installation</th>
+											<th class="text-center">Date d'archive</th>
+											<th class="text-center">ARS installé</th>
+											<th class="text-center">ARS récupéré</th>
+											<th class="text-center">Commentaire</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for opened in openedTickets %} 
+										<tr role="row">
+											<td class="text-center">{{opened.nTicket}}</td>
+											<td class="text-center">{{opened.CodeIncident}}</td>
+											<td class="text-center">{{opened.dateCreation|date("d/m/Y")}} 
+												{% set diff = date(opened.dateMaj).diff(date(opened.dateCreation)) %}
+												{% set leftDays = diff.days %}
+												(<strong>+{{leftDays}} Jours</strong>)
+											</td>
+											<td class="text-center">{{opened.codeMagasin}}</td>
+											<td class="text-center">{{opened.nomMagasin}}</td>
+											<td class="text-center">
+												<a class="btn btn-info" href="{{path('reseau_details', {'id': opened.nTicket})}}" role="button">
+													<i class="fas fa-info-circle"></i>
+												</a>
+											</td>
+											<td class="text-center">
+												<a class="modal-install btn btn-success" href="#installkit" data-target="{{path('reseau_install', {'id': opened.nTicket})}}" data-toggle="modal" role="button">
+													<i class="fas fa-edit"></i> Installer un Kit-4G
+												</a>
+												<div id="installkit" class="modal" tabindex="-1" role="dialog">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															
+														</div>
+													</div>
+												</div>
+											</td> 
+											<td class="text-center">{{opened.typeMagasin}}</td>
+											<td class="text-center">{{opened.codeMaintneur}}</td>
+											<td class="text-center">{{opened.description}}</td>
+											<td class="text-center">{{opened.historique}}</td>
+											<td class="text-center">{{opened.etatTicket}}</td>
+											<td class="text-center">{{opened.dateInstall|date("d/m/Y")}}</td>
+											<td class="text-center">{{opened.dateArchive|date("d/m/Y")}}</td>
+											<td class="text-center">{{opened.arsInstall}}</td>
+											<td class="text-center">{{opened.arsRecup}}</td>
+											<td class="text-center">{{opened.commentaire}}</td>
+										</tr>
+										{% endfor  %} 
+									</tbody>
+								</table>
+							</div>
+						</div>
+					  </div>
+					<!-- /.card -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+			<!-- Treated tickets -->
+			<div class="row">
+				<div class="col-12">
+				  <div class="card card-success">
+					<div class="card-header">
+						<h3 class="card-title w-100">
+							<a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+								<center><strong>{{treatedTickets|length}} Tickets traités ( Kit-4G installés en magasin )</strong></center>
+							</a>
+						</h3>
+					</div>
+					<div id="collapseTwo" class="collapse show">
+						<div class="card-body">
+							<table id="tabtickettraite" class="table display table-striped w-100">
+								<thead>
+									<tr role="row">
+										<th class="text-center">N° Ticket</th>
+										<th class="text-center">Code incident</th>
+										<th class="text-center">Date d'ouverture</th>
+										<th class="text-center">Date d'installation (Depuis)</th>
+										<th class="text-center">Code magasin</th>
+										<th class="text-center">Nom magasin</th>
+										<th class="text-center">Détails</th>
+										<th class="text-center">Type magasin</th>
+										<th class="text-center">Code maintneur</th>
+										<th class="text-center">Description</th>
+										<th class="text-center">Historique</th>
+										<th class="text-center">Etat ticket</th>
+										<th class="text-center">Date d'archive</th>
+										<th class="text-center">ARS installé</th>
+										<th class="text-center">ARS récupéré</th>
+										<th class="text-center">Commentaire</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for treated in treatedTickets %}
+									<tr role="row">
+										<td class="text-center">{{treated.nTicket}}</td>
+										<td class="text-center">{{treated.codeIncident}}</td>
+										<td class="text-center">{{treated.dateCreation|date("d/m/Y")}}
+										<td class="text-center">{{treated.dateInstall|date("d/m/Y")}} 
+											{% set diff = date(treated.dateMaj).diff(date(treated.dateInstall)) %}
+											{% set leftDays = diff.days %}
+											(<strong>+{{leftDays}} Jours</strong>)
+										</td>
+										<td class="text-center">{{treated.codeMagasin}}</td>
+										<td class="text-center">{{treated.nomMagasin}}</td>
+										<td class="text-center">
+											<a class="btn btn-info" href="{{path('reseau_details', {'id': treated.nTicket})}}" role="button">
+												<i class="fas fa-info-circle"></i>
+											</a>
+										</td>
+										<td class="text-center">{{treated.typeMagasin}}</td>
+										<td class="text-center">{{treated.codeMaintneur}}</td>
+										<td class="text-center">{{treated.description}}</td>
+										<td class="text-center">{{treated.historique}}</td>
+										<td class="text-center">{{treated.etatTicket}}</td>
+										<td class="text-center">{{treated.dateArchive|date("d/m/Y")}}</td>
+										<td class="text-center">{{treated.arsInstall}}</td>
+										<td class="text-center">{{treated.arsRecup}}</td>
+										<td class="text-center">{{treated.commentaire}}</td>	
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.card -->
+			  </div>
+			  <!-- /.col -->
+		  	</div>
+		  	<!-- /.row -->
+			<!-- Closed tickets -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title w-100">
+								<a class="d-block w-100" data-toggle="collapse" href="#collapseThree">
+									<center><strong>{{closedTickets|length}} Tickets à clôturer ( Kits 4G à retirer en magasin )</strong></center>
+								</a>
+							</h3>
+						</div>
+						<div id="collapseThree" class="collapse show">
+							<div class="card-body">
+								<table id="tabticketcloturer" class="table display table-striped w-100">
+									<thead>
+										<tr role="row">
+											<th class="text-center">N° Ticket</th>
+											<th class="text-center">Code incident</th>
+											<th class="text-center">Date d'ouverture</th>
+											<th class="text-center">Date d'installation (Depuis)</th>
+											<th class="text-center">Code magasin</th>
+											<th class="text-center">Nom magasin</th>
+											<th class="text-center">Détails</th>
+											<th class="text-center">Action</th>
+											<th class="text-center">Type magasin</th>
+											<th class="text-center">Code maintneur</th>
+											<th class="text-center">Description</th>
+											<th class="text-center">Historique</th>
+											<th class="text-center">Etat ticket</th>
+											<th class="text-center">Date d'archive</th>
+											<th class="text-center">ARS installé</th>
+											<th class="text-center">ARS récupéré</th>
+											<th class="text-center">Commentaire</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for closed in closedTickets %}
+										<tr role="row">
+											<td class="text-center">{{closed.nTicket}}</td>
+											<td class="text-center">{{closed.codeIncident}}</td>
+											<td class="text-center">{{closed.dateCreation|date("d/m/Y")}}</td>
+											<td class="text-center">{{closed.dateInstall|date("d/m/Y")}}
+												{% set diff = date(closed.dateMaj).diff(date(closed.dateInstall)) %}
+												{% set leftDays = diff.days %}
+												(<strong>+{{leftDays}} Jours</strong>)
+											</td>
+											<td class="text-center">{{closed.codeMagasin}}</td>
+											<td class="text-center">{{closed.nomMagasin}}</td>
+											<td class="text-center">
+												<a class="btn btn-info" href="{{path('reseau_details', {'id': closed.nTicket})}}" role="button">
+													<i class="fas fa-info-circle"></i>
+												</a>
+											</td>
+											<td class="text-center">
+												<a class="modal-recuperate btn btn-danger" href="#recuperatekit" data-target="{{path('reseau_recuperate', {'id': closed.nTicket})}}" data-toggle="modal" role="button">
+													<i class="fas fa-edit"></i> Récupérer le Kit-4G
+												</a>
+												<div id="recuperatekit" class="modal" tabindex="-1" role="dialog">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															
+														</div>
+													</div>
+												</div>
+											</td> 
+											<td class="text-center">{{closed.typeMagasin}}</td>
+											<td class="text-center">{{closed.codeMaintneur}}</td>
+											<td class="text-center">{{closed.description}}</td>
+											<td class="text-center">{{closed.historique}}</td>
+											<td class="text-center">{{closed.etatTicket}}</td>
+											<td class="text-center">{{closed.dateArchive|date("d/m/Y")}}</td>
+											<td class="text-center">{{closed.arsInstall}}</td>
+											<td class="text-center">{{closed.arsRecup}}</td>
+											<td class="text-center">{{closed.commentaire}}</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.container-fluid -->
+		<!-- No incidents -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="text-secondary">
+						<i class="fas fa-code-branch nav-icon"></i> Sans incidents enregistrés
+					</h5>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card card-secondary">
+						<div class="card-header">
+							<h3 class="card-title w-100">
+								<a class="d-block w-100" data-toggle="collapse" href="#noIncident">
+									<center><strong>{{ noIncidentTickets|length }} Sans incidents</strong></center>
+								</a>
+							</h3>
+						</div>
+						<div id="noIncident" class="collapse show">
+							<div class="card-body">
+								<table id="tabticketnoincident" class="table display table-striped w-100">
+									<thead>
+										<tr role="row">
+											<th class="text-center">Nom magasin</th>
+											<th class="text-center">Code magasin</th>
+											<th class="text-center">Ville</th>
+											<th class="text-center">Code géode</th>
+											<th class="text-center">Date d'installation (Depuis)</th>
+											<th class="text-center">Details</th>
+											<th class="text-center">Action</th>
+											<th class="text-center">N° Kit-4G</th>
+											<th class="text-center">Commentaire</th>
+											<th class="text-center">ARS récupéré</th>
+											<th class="text-center">Date d'archive</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for noIncident in noIncidentTickets %} 
+										<tr role="row">
+											<td class="text-center">{{noIncident.nomMagasin}}</td>
+											<td class="text-center">{{noIncident.codeMagasin}}</td>
+											<td class="text-center">{{noIncident.ville}}</td>
+											<td class="text-center">{{noIncident.codeGeode}}</td>
+											<td class="text-center">{{noIncident.dateInstall|date("d/m/Y")}}
+												{% set diff = date(noIncident.dateMaj).diff(date(noIncident.dateInstall)) %}
+												{% set leftDays = diff.days %}
+												(<strong>+{{leftDays}} Jours</strong>)
+											</th>
+											<td class="text-center">
+												<a class="btn btn-info" href="{{path('no_incident_details', {'id': noIncident.id})}}" role="button">
+													<i class="fas fa-info-circle"></i>
+												</a>
+											</td>
+											<td class="text-center">
+												<a class="modal-no-incident-recuperate btn btn-danger" href="#noincidentrecuperatekit" data-target="{{path('no_incident_recuperate', {'id': noIncident.id})}}" data-toggle="modal" role="button">
+													<i class="fas fa-edit"></i> Récupérer le Kit-4G
+												</a>
+												<div id="noincidentrecuperatekit" class="modal" tabindex="-1" role="dialog">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															
+														</div>
+													</div>
+												</div>
+											</td> 
+											<td class="text-center">{{noIncident.nKit}}</td>
+											<td class="text-center">{{noIncident.commentaire}}</td>
+											<td class="text-center">{{noIncident.arsRecup}}</td>
+											<td class="text-center">{{noIncident.dateArchive|date("d/m/Y")}}</td>
+											
+										</tr>
+										{% endfor  %} 
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+      	<!-- /.container-fluid -->
+		<!-- Recurring stores -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="text-secondary">
+						<i class="fas fa-code-branch nav-icon"></i> Magasins récurrents
+					</h5>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title w-100">
+								<a class="d-block w-100" data-toggle="collapse" href="#collapseFour">
+									<center><strong>{{recurringStores|length}} Magasins récurrents (12 derniers mois)</strong></center>
+								</a>
+							</h3>
+						</div>
+						<div id="collapseFour" class="collapse show">
+							<div class="card-body">
+								<table id="tabstores" class="table display table-striped w-100">
+									<thead>
+										<tr role="row">
+											<th class="text-center">Code magasin</th>
+											<th class="text-center">Nom magasin</th>
+											<th class="text-center">Type magasin</th>
+											<th class="text-center">Nombre tickets</th>
+											<th class="text-center">Détails</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for recurring in recurringStores %}
+										<tr role="row">
+											<td class="text-center">{{recurring.k_codeMagasin}}</td>
+											<td class="text-center">{{recurring.k_nomMagasin}}</td>
+											<td class="text-center">{{recurring.k_typeMagasin}}</td>
+											<td class="text-center">{{recurring.nbTicket}}</td>
+											<td class="text-center">
+												<a class="modal-recurring btn btn-info" href="#recurringDetails" data-target="{{path('reseau_recurring_details', {'codeMagasin': recurring.k_codeMagasin})}}" data-toggle="modal" role="button">
+													<i class="fas fa-eye"></i>
+												</a>
+												<div id="recurringDetails" class="modal" tabindex="-1" role="dialog">
+													<div class="modal-dialog modal-lg" role="document">
+														<div class="modal-content">
+															
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
