@@ -32,16 +32,13 @@
                     <!-- general form elements -->
                     <div class="card card-container card-outline card-primary">
                         <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">Mise à jour</h3>
+                            <h3 class="card-title m-auto">Tickets IBM Ouverts (Fichier Excel)</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body card-content">
                             <form method="post" id="excel-form">
-                                <label for="inputfile" class="text-center">Tickets Proxi Ouverts (Fichier Excel)</label>
                                 <input type="file" name="excel-file" id="excel-file">
                             </form>
-                            <br/>
-                            <div id="excel-result"></div>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -54,17 +51,17 @@
                             <h3 class="card-title m-auto">Dernière mise à jour</h3>
                         </div>
                         <!-- /.card-header -->
-                        {% if lastUpdatedDate[0]["maxDate"] == "now"|date("d/m/Y") %}
+                        {% if lastUpdatedDate[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
                         <div class="card-body card-content bg-danger d-flex">
-                            <h1 class="m-auto">
+                            <h2 class="m-auto">
                                 <b>{{"now"|date("d/m/Y")}}</b>
-                            </h1>
+                            </h2>
                         </div>
                         {% else %}
                         <div class="card-body card-content bg-info d-flex">
-                            <h1 class="m-auto">
+                            <h2 class="m-auto">
                                 <b>{{lastUpdatedDate[0]["maxDate"]}}</b>
-                            </h1>
+                            </h2>
                         </div>
                         {% endif %}
                         <!-- /.card-body -->

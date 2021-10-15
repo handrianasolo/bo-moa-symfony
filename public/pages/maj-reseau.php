@@ -1,11 +1,12 @@
 <?php
 
 require('database.php');
+require('../../vendor/autoload.php');
 
 $bd_tickets_reseau = array();
 
 // tickets dans la base de données avant la mise à jour
-$query= "SELECT `nTicket`,`etatTicket`,`dateCreation`,`dateInstall`,`dateArchive` FROM `ticketsreseau` 
+$query= "SELECT `nTicket`,`etatTicket` FROM `ticketsreseau` 
         WHERE `ticketsreseau`.`etatTicket` = 'Ticket_ouvert' 
         OR `ticketsreseau`.`etatTicket` = 'Ticket_traité' 
         OR `ticketsreseau`.`etatTicket` = 'Ticket_a_fermer'";
@@ -13,9 +14,6 @@ $tickets = $bdd_connection->query($query);
 while($ticket = $tickets->fetch()){
 	$tick = array();
 	array_push(	$tick, $ticket[1]);
-	array_push(	$tick, $ticket[2]);
-	array_push(	$tick, $ticket[3]);
-	array_push(	$tick, $ticket[4]);
 	$bd_tickets_reseau[$ticket[0]] = $tick;
 }
 
@@ -24,8 +22,7 @@ if(!empty($_FILES["excel-file"])){
 	$file_array = explode(".", $_FILES["excel-file"]["name"]);
 	if( ( strpos($file_array[0], "Kit4G") ) && $file_array[1] == "xlsx"){
 		
-		//include("../plugins/phpExcel/IOFactory.php");
-		$object = PHPExcel_IOFactory::load($_FILES["excel-file"]["tmp_name"]);
+		$object = \PhpOffice\PhpSpreadsheet\IOFactory::load($_FILES["excel-file"]["tmp_name"]);
 		
 		foreach($object->getWorksheetIterator() as $worksheet){
 			$highestRow = $worksheet->getHighestRow();
@@ -149,13 +146,14 @@ if(!empty($_FILES["excel-file"])){
 		    echo '<label class="text-danger">Fichier non valide. 
 		   	Merci de vérifier le nom et le format du fichier (Ex : FINAL_Rapport_Backlogs_Tickets_Reseau_Proxi_Kit4G_Prod.xlsx)</label>';  
     }  
-} 
+}
 
 function convertdatetimeFRtoUS ($datetime)
 {
 	$pieces = explode(" ", $datetime);	
 	$pieces2 = explode("/", $pieces[0]);
-	return $pieces2[2] . "-" . $pieces2[1] . "-" . $pieces2[0] . " " . $pieces[1]; 
+	$dateUS = $pieces2[2] . "-" . $pieces2[1] . "-" . $pieces2[0] . " " . $pieces[1];
+	return $dateUS; 
 } 
 
 function convertdatetimeUStoFR ($datetime)

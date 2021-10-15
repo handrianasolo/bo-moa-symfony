@@ -25,7 +25,7 @@ class TicketNoIncidentRepository extends ServiceEntityRepository
     public function findByTicketState(string $state): array
     {
         return $this->createQueryBuilder('n')
-            ->where('n.etat = :state')
+            ->andWhere('n.etat = :state')
             ->setParameter('state', $state)
             ->getQuery()
             ->getResult()

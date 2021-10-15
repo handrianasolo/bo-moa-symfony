@@ -1,5 +1,5 @@
 <?php
-    $bddname='bo-moa-db-symfony-dev';
+    $bddname='bo-moa-symfony';
     $BDD_hote='localhost';
     $BDD_user='root';
     $BDD_pass='';

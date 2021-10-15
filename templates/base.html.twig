@@ -43,7 +43,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{path('home')}}" class="nav-link">Accueil</a>
@@ -55,12 +55,6 @@
                 <!-- Logout -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">Deconnexion <i class="nav-icon fas fa-sign-out-alt"></i></a>
-                </li>
-                <!-- Expand in full screen -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </a>
                 </li>
             </ul>
         </nav>
@@ -163,16 +157,18 @@
             {# read and display just one flash message type #}
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
-                        {% for message in app.flashes('success') %}
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {% for label, messages in app.flashes(['warning', 'danger', 'success', 'info']) %}
+                        {% for message in messages %}
+                        <div class="col-12">
+                            <div class="alert alert-{{label}} alert-dismissible fade show" role="alert">
                                 <strong><i class="fas fa-exclamation-triangle"></i> {{ message }}</strong>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                             </div>
+                        </div>
                         {% endfor %}
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -192,6 +188,9 @@
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.js"></script>
 
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>

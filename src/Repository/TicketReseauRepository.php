@@ -40,7 +40,7 @@ class TicketReseauRepository extends ServiceEntityRepository
     public function findByTicketState(string $state): array
     {
         return $this->createQueryBuilder('k')
-            ->where('k.etatTicket = :state')
+            ->andWhere('k.etatTicket = :state')
             ->setParameter('state', $state)
             ->getQuery()
             ->getResult()
@@ -65,9 +65,21 @@ class TicketReseauRepository extends ServiceEntityRepository
     public function findRecurringStoreDetailsBy(string $codeMagasin): array
     {
         return $this->createQueryBuilder('k')
-            ->where('k.codeMagasin = :codeMagasin')
+            ->andWhere('k.codeMagasin = :codeMagasin')
             ->setParameter('codeMagasin', $codeMagasin)
             ->orderBy('k.dateCreation', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByOpenedTreatedAndToClose(): array
+    { 
+        return $this->createQueryBuilder('k')
+            ->select("k.nTicket, k.etatTicket, k.dateCreation, k.dateInstall, k.dateArchive")
+            ->where("k.etatTicket = 'Ticket_ouvert'")
+            ->orWhere("k.etatTicket = 'Ticket_traité'")
+            ->orWhere("k.etatTicket = 'Ticket_a_fermer'")
             ->getQuery()
             ->getResult()
         ;

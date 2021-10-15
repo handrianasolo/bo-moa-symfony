@@ -146,7 +146,7 @@ class TicketNoIncident
         return $this->dateInstall;
     }
 
-    public function setDateInstall(\DateTimeInterface $dateInstall): self
+    public function setDateInstall(?\DateTimeInterface $dateInstall): self
     {
         $this->dateInstall = $dateInstall;
 

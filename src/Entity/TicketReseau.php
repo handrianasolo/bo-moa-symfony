@@ -138,6 +138,13 @@ class TicketReseau
         return $this->nTicket;
     }
 
+    public function setNTicket(?string $nTicket): self
+    {
+        $this->nTicket = $nTicket;
+
+        return $this;
+    }
+
     public function getCodeIncident(): ?string
     {
         return $this->codeIncident;
