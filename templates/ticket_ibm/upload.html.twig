@@ -36,8 +36,15 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body card-content">
-                            <form method="post" id="excel-form">
-                                <input type="file" name="excel-file" id="excel-file">
+                            <form method="post" action="{{path('ibm_upload')}}" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input type="file" class="form-control p-1" name="file" id="file">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fas fa-upload"></i> Traiter
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                         <!-- /.card-body -->

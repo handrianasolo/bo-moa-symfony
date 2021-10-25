@@ -5,8 +5,6 @@
 {% block javascripts %}
     <!-- Datepicker configuration -->
     <script src="{{ asset('dist/js/pages/datepicker.js')}}"></script>
-    <!-- Upload excel file -->
-    <script src="{{ asset('dist/js/pages/ticket-reseau/maj-reseau.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -38,8 +36,17 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <form method="post" action="{{path('reseau_upload')}}" id="excel-form">
-                                <input type="file" name="excel-file" id="excel-file">
+                            <form action="{{path('reseau_upload')}}" method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    {{form_widget(excelForm.file, {'attr':{'name':'file', 'class': 'p-1'}})}}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fas fa-upload"></i> Traiter
+                                        </button>
+                                    </div>
+                                </div>
+                                {{form_errors(excelForm.file)}}
+                                {{form_rest(excelForm)}}
                             </form>
                         </div>
                         <!-- /.card-body -->

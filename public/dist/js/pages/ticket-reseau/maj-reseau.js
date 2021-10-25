@@ -1,20 +1,27 @@
 // Import excel file
-$(function(){
-    $('#excel-file').on("change", function(){
-        $('#excel-form').trigger("submit");
+$(document).ready(function() {
+    $('#file').on('change', function(){
+        $('form').trigger('submit');
 	});
 	
-	$('#excel-form').on('submit', function(event){
+	$('form').on('submit', function(event){
 		event.preventDefault();
 		$.ajax({
-			url: "{{path('reseau_upload')}}",
-			method: "POST",
+			url: "{{path('upload-xlsx')}}",
+			type: "post",
 			data: new FormData(this),
 			contentType: false,
 			processData: false,
-			success: function(data){
-				$('#excel-file').val('');
-            }
+			cache: false,
+			error:function(err){
+				console.error(err);
+			},
+			success:function(data){
+				$('#file').val('');      
+			},
+			complete:function(){
+				console.log("Request finished.");
+			}
 		});
 	});
 });
