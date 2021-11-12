@@ -30,6 +30,11 @@ class ExcelFileFormType extends AbstractType
               'mimeTypesMessage' => 'Le format du fichier n\'est pas valide.'
             ])
           ],
+          'attr' => [
+            'class' => 'p-1',
+            'name' => 'excel_file',
+            'id' => 'excel_file',
+          ]
         ])
       ;
     }

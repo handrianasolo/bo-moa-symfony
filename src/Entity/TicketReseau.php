@@ -30,11 +30,11 @@ class TicketReseau
     private string $codeIncident;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateCreation", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateCreation;
+    private ?\DateTime $dateCreation;
 
     /**
      * @var string|null
@@ -79,11 +79,11 @@ class TicketReseau
     private ?string $historique;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateMaj", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateMaj;
+    private ?\DateTime $dateMaj;
 
     /**
      * @var string
@@ -93,18 +93,18 @@ class TicketReseau
     private string $etatTicket = 'Ticket_ouvert';
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateInstall", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateInstall;
+    private ?\DateTime $dateInstall;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateArchive", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateArchive;
+    private ?\DateTime $dateArchive;
 
     /**
      * @var string|null
@@ -157,12 +157,12 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?\DateTime
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    public function setDateCreation(\DateTime $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
 
@@ -241,12 +241,12 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateMaj(): ?\DateTimeInterface
+    public function getDateMaj(): ?\DateTime
     {
         return $this->dateMaj;
     }
 
-    public function setDateMaj(\DateTimeInterface $dateMaj): self
+    public function setDateMaj(\DateTime $dateMaj): self
     {
         $this->dateMaj = $dateMaj;
 
@@ -265,24 +265,24 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateInstall(): ?\DateTimeInterface
+    public function getDateInstall(): ?\DateTime
     {
         return $this->dateInstall;
     }
 
-    public function setDateInstall(\DateTimeInterface $dateInstall): self
+    public function setDateInstall(\DateTime $dateInstall): self
     {
         $this->dateInstall = $dateInstall;
 
         return $this;
     }
 
-    public function getDateArchive(): ?\DateTimeInterface
+    public function getDateArchive(): ?\DateTime
     {
         return $this->dateArchive;
     }
 
-    public function setDateArchive(\DateTimeInterface $dateArchive): self
+    public function setDateArchive(\DateTime $dateArchive): self
     {
         $this->dateArchive = $dateArchive;
 

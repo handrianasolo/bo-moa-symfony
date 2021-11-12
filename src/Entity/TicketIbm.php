@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\TicketIbmRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,20 +22,20 @@ class TicketIbm
     private string $nIncident;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateAffectation", type="datetime", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private \DateTimeInterface $dateAffectation;
+    private \DateTime $dateAffectation;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateCreation", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateCreation;
+    private ?\DateTime $dateCreation;
 
     /**
      * @var string|null
@@ -158,11 +157,11 @@ class TicketIbm
     private ?string $typeMagasin;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTime
      *
      * @ORM\Column(name="dateMaj", type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface $dateMaj;
+    private ?\DateTime $dateMaj;
 
     /**
      * @var string
@@ -184,17 +183,17 @@ class TicketIbm
         return $this->nIncident;
     }
 
-    public function getDateAffectation(): ?\DateTimeInterface
+    public function getDateAffectation(): ?\DateTime
     {
         return $this->dateAffectation;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?\DateTime
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    public function setDateCreation(\DateTime $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
 
@@ -405,12 +404,12 @@ class TicketIbm
         return $this;
     }
 
-    public function getDateMaj(): ?\DateTimeInterface
+    public function getDateMaj(): ?\DateTime
     {
         return $this->dateMaj;
     }
 
-    public function setDateMaj(\DateTimeInterface $dateMaj): self
+    public function setDateMaj(\DateTime $dateMaj): self
     {
         $this->dateMaj = $dateMaj;
 
