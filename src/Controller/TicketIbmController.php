@@ -13,13 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class TicketIbmController extends AbstractController
 {
     /**
-     * upload ibm excel file
-     * @Route("/mise-a-jour", name="ibm_upload", methods={"GET"})
+     * @Route("/gestion-tickets", name="ibm_manage", methods={"GET"})
      */
     public function index(TicketIbmRepository $ticketIbmRepository): Response
     {
-        $lastUpdatedDate = $ticketIbmRepository->findOneByLastUpdatedDate();
-        //dd($lastUpdatedDate[0]['maxDate']);
         $sixDays = $ticketIbmRepository->findByDays(6);
         $fiveDays = $ticketIbmRepository->findByDays(5);
         $fourDays = $ticketIbmRepository->findByDays(4);
@@ -33,8 +30,7 @@ class TicketIbmController extends AbstractController
 
         $moreOneMonth = $ticketIbmRepository->findByMoreOneMonth(27);
 
-        return $this->render('ticket_ibm/upload.html.twig', [
-            'lastUpdatedDate' => $lastUpdatedDate,
+        return $this->render('ticket_ibm/manage.html.twig', [
             'sixDays' => $sixDays,
             'fiveDays' => $fiveDays,
             'fourDays' => $fourDays,
@@ -50,7 +46,7 @@ class TicketIbmController extends AbstractController
 
     /**
      * get ibm details
-     * @Route("/mise-a-jour/details/{id}-days", name="ibm_details_days", methods={"GET"})
+     * @Route("/gestion-tickets/details/{id}-days", name="ibm_details_days", methods={"GET"})
      */
     public function detailsDays(int $id, TicketIbmRepository $ticketIbmRepository): Response
     {
@@ -64,7 +60,7 @@ class TicketIbmController extends AbstractController
 
     /**
      * get ibm details
-     * @Route("/mise-a-jour/details/between-{id1}-and-{id2}-days", name="ibm_details_weeks", methods={"GET"})
+     * @Route("/gestion-tickets/details/between-{id1}-and-{id2}-days", name="ibm_details_weeks", methods={"GET"})
      */
     public function detailsWeeks(int $id1, int $id2, TicketIbmRepository $ticketIbmRepository): Response
     {
@@ -79,7 +75,7 @@ class TicketIbmController extends AbstractController
 
     /**
      * get ibm details
-     * @Route("/mise-a-jour/details/more-than-{id}-days", name="ibm_details_months", methods={"GET"})
+     * @Route("/gestion-tickets/details/more-than-{id}-days", name="ibm_details_months", methods={"GET"})
      */
     public function detailsMoreOneMonth(int $id, TicketIbmRepository $ticketIbmRepository): Response
     {
@@ -91,14 +87,14 @@ class TicketIbmController extends AbstractController
     }
 
     /**
-     * get all recurring tickets
-     * @Route("/gestion-tickets", name="ibm_manage", methods={"GET"})
+     * @Route("/recherche-avancé", name="ibm_search", methods={"GET"})
      */
-    public function manage(TicketIbmRepository $ticketIbmRepository): Response
+    public function search(TicketIbmRepository $ticketIbmRepository): Response
     {
+        // get all recurring NON_RESOLU tickets
         $recurringTickets = $ticketIbmRepository->findRecurringTickets('NON_RESOLU');
 
-        return $this->render('ticket_ibm/manage.html.twig', [
+        return $this->render('ticket_ibm/search.html.twig', [
             'recurringTickets' => $recurringTickets,
         ]);
     }

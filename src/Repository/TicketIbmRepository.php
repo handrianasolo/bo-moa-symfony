@@ -145,4 +145,29 @@ class TicketIbmRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return array|null
+     */
+    public function findByNoneResolvedOrResolvedTickets(string $etatTicket): ?array
+    {
+        return $this->createQueryBuilder('i')
+            ->select("i.nIncident, i.dateAffectation")
+            ->where("i.etatTicket = :etatTicket")
+            ->setParameter('etatTicket', $etatTicket)
+            ->getQuery()
+            ->getScalarResult()
+        ;
+    }
+
+    public function findOneByIncidentAndDateAffectation(string $nIncident, string $datetime): ?TicketIbm
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.nIncident = :nIncident')
+            ->andWhere('i.dateAffectation = :datetime')
+            ->setParameter('nIncident', $nIncident)
+            ->setParameter('datetime', $datetime)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

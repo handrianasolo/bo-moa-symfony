@@ -17,7 +17,6 @@ class TicketReseau
      * @var string
      *
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(name="nTicket", type="string", length=20, nullable=false)
      */
     private string $nTicket;
@@ -30,11 +29,11 @@ class TicketReseau
     private string $codeIncident;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateCreation", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateCreation;
+    private ?\DateTimeInterface $dateCreation;
 
     /**
      * @var string|null
@@ -79,11 +78,11 @@ class TicketReseau
     private ?string $historique;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateMaj", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateMaj;
+    private ?\DateTimeInterface $dateMaj;
 
     /**
      * @var string
@@ -93,18 +92,18 @@ class TicketReseau
     private string $etatTicket = 'Ticket_ouvert';
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateInstall", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateInstall;
+    private ?\DateTimeInterface $dateInstall;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateArchive", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateArchive;
+    private ?\DateTimeInterface $dateArchive;
 
     /**
      * @var string|null
@@ -125,20 +124,12 @@ class TicketReseau
      */
     private $commentaire;
 
-    public function __construct()
-    {
-        $this->dateCreation = new \DateTime();
-        $this->dateInstall = new \DateTime();
-        $this->dateArchive = new \DateTime();
-        $this->dateMaj = new \DateTime();
-    }
-
     public function getNTicket(): ?string
     {
         return $this->nTicket;
     }
 
-    public function setNTicket(?string $nTicket): self
+    public function setNTicket(string $nTicket): self
     {
         $this->nTicket = $nTicket;
 
@@ -157,12 +148,12 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTime
+    public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTime $dateCreation): self
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
 
@@ -241,12 +232,12 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateMaj(): ?\DateTime
+    public function getDateMaj(): ?\DateTimeInterface
     {
         return $this->dateMaj;
     }
 
-    public function setDateMaj(\DateTime $dateMaj): self
+    public function setDateMaj(\DateTimeInterface $dateMaj): self
     {
         $this->dateMaj = $dateMaj;
 
@@ -265,24 +256,24 @@ class TicketReseau
         return $this;
     }
 
-    public function getDateInstall(): ?\DateTime
+    public function getDateInstall(): ?\DateTimeInterface
     {
         return $this->dateInstall;
     }
 
-    public function setDateInstall(\DateTime $dateInstall): self
+    public function setDateInstall(\DateTimeInterface $dateInstall): self
     {
         $this->dateInstall = $dateInstall;
 
         return $this;
     }
 
-    public function getDateArchive(): ?\DateTime
+    public function getDateArchive(): ?\DateTimeInterface
     {
         return $this->dateArchive;
     }
 
-    public function setDateArchive(\DateTime $dateArchive): self
+    public function setDateArchive(\DateTimeInterface $dateArchive): self
     {
         $this->dateArchive = $dateArchive;
 

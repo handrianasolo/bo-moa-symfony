@@ -49,7 +49,7 @@ class TicketNoIncident
     /**
      * @ORM\Column(name="dateInstall", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateInstall;
+    private ?\DateTimeInterface $dateInstall;
 
     /**
      * @ORM\Column(name="commentaire", type="text", length=0, nullable=true)
@@ -69,12 +69,12 @@ class TicketNoIncident
     /**
      * @ORM\Column(name="dateArchive", type="datetime", nullable="true")
      */
-    private ?\DateTime $dateArchive;
+    private ?\DateTimeInterface $dateArchive;
 
     /**
      * @ORM\Column(name="dateMaj", type="datetime", nullable="true")
      */
-    private ?\DateTime $dateMaj;
+    private ?\DateTimeInterface $dateMaj;
 
     public function getId(): ?int
     {
@@ -141,12 +141,12 @@ class TicketNoIncident
         return $this;
     }
 
-    public function getDateInstall(): ?\DateTime
+    public function getDateInstall(): ?\DateTimeInterface
     {
         return $this->dateInstall;
     }
 
-    public function setDateInstall(?\DateTime $dateInstall): self
+    public function setDateInstall(?\DateTimeInterface $dateInstall): self
     {
         $this->dateInstall = $dateInstall;
 
@@ -189,24 +189,24 @@ class TicketNoIncident
         return $this;
     }
 
-    public function getDateArchive(): ?\DateTime
+    public function getDateArchive(): ?\DateTimeInterface
     {
         return $this->dateArchive;
     }
 
-    public function setDateArchive(\DateTime $dateArchive): self
+    public function setDateArchive(\DateTimeInterface $dateArchive): self
     {
         $this->dateArchive = $dateArchive;
 
         return $this;
     }
 
-    public function getDateMaj(): ?\DateTime
+    public function getDateMaj(): ?\DateTimeInterface
     {
         return $this->dateMaj;
     }
 
-    public function setDateMaj(\DateTime $dateMaj): self
+    public function setDateMaj(\DateTimeInterface $dateMaj): self
     {
         $this->dateMaj = $dateMaj;
 

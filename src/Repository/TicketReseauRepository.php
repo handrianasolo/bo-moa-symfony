@@ -81,7 +81,7 @@ class TicketReseauRepository extends ServiceEntityRepository
             ->orWhere("k.etatTicket = 'Ticket_traité'")
             ->orWhere("k.etatTicket = 'Ticket_a_fermer'")
             ->getQuery()
-            ->getResult()
+            ->getScalarResult()
         ;
     }
 

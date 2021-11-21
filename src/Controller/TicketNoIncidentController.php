@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\TicketNoIncident;
 use App\Form\ArsRecupNoIncidentFormType;
 use App\Form\CommentNoIncidentFormType;
+use App\Form\TicketNoIncidentFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,6 +92,34 @@ class TicketNoIncidentController extends AbstractController
         return $this->render('ticket_no_incident/recuperate.html.twig', [
             'ticketNoIncident' => $ticketNoIncident,
             'recuperateForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/ajouter-ticket-no-incident", name="reseau_add", methods={"GET","POST"})
+     */
+    public function create(Request $request): Response
+    {
+        $ticketNoIncident = new TicketNoIncident();
+        $form = $this->createForm(TicketNoIncidentFormType::class, $ticketNoIncident);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $ticketNoIncident->setEtat('traité');
+            $ticketNoIncident->setDateMaj(new \DateTime());
+            // persist object
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($ticketNoIncident);
+            $entityManager->flush();
+            // generate a success message
+            $this->addFlash('success','Le magasin ' . $ticketNoIncident->getCodeMagasin() . ' a bien été enregistré.' );
+            // redirect to current page
+            return $this->redirectToRoute('reseau_add');
+        }
+
+        return $this->render('ticket_no_incident/create.html.twig',[
+            'noIncidentForm' => $form->createView(),
         ]);
     }
 }
