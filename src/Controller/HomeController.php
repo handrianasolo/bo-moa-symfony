@@ -59,7 +59,7 @@ class HomeController extends AbstractController
     private function getIbmData(TicketIbmRepository $ticketIbmRepository, string $etatTicket): array
     {
         $dbTickets = array();
-        $tickets = $ticketIbmRepository->findByNoneResolvedOrResolvedTickets($etatTicket);
+        $tickets = $ticketIbmRepository->findByNoneResolvedOrResolved($etatTicket);
 
         foreach($tickets as $ticket) {
             array_push($dbTickets, $ticket["nIncident"]." ".$ticket["dateAffectation"]);
@@ -204,9 +204,7 @@ class HomeController extends AbstractController
                 $sheetData = $row->toArray(null, true, true, true); 
                 //dd($sheetData); 
                 $noneResolvedTickets = $this->getIbmData($ticketIbmRepository, 'NON_RESOLU');
-                //dd($noneResolvedTickets); 
-                $resolvedTickets = $this->getIbmData($ticketIbmRepository, 'RESOLU');
-                //dd($resolvedTickets);
+                //dd($noneResolvedTickets);
 
                 foreach($sheetData as $key => $value) {
                     $ticketXlsx = $value['C'] . " " . $value['B'] .":00";

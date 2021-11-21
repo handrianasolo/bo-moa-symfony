@@ -18,10 +18,7 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function doSomething($value)
-    {
-        // ...
-    }
+    public function doSomething($value){}
 
     public function getActualRoute(string $value, string $route): string
     {
