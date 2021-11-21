@@ -96,15 +96,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{path('reseau_upload')}}" class="nav-link {{actual_route('reseau_upload',route)}}">
-                                        <i class="fas fa-upload nav-icon"></i>
-                                        <p>Mise à jour</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="{{path('reseau_manage')}}" class="nav-link {{actual_route('reseau_manage',route)}}">
                                         <i class="fas fa-tasks nav-icon"></i>
                                         <p>Gestion des tickets</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{path('reseau_add')}}" class="nav-link {{actual_route('reseau_add',route)}}">
+                                        <i class="fas fa-save nav-icon"></i>
+                                        <p>Enregistrement</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -125,15 +125,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{path('ibm_upload')}}" class="nav-link {{actual_route('ibm_upload',route)}}">
-                                    <i class="fas fa-upload nav-icon"></i>
-                                    <p>Mise à jour</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="{{path('ibm_manage')}}" class="nav-link {{actual_route('ibm_manage',route)}}">
                                     <i class="fas fa-tasks nav-icon"></i>
                                     <p>Gestion des tickets</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{path('ibm_search')}}" class="nav-link {{actual_route('ibm_search',route)}}">
+                                    <i class="fas fa-search nav-icon"></i>
+                                    <p>Recherche avancé</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -157,7 +157,7 @@
             {# read and display just one flash message per type #}
             <div class="container-fluid">
                 <div class="row">
-                    {% for label, messages in app.flashes(['warning', 'danger', 'success', 'info']) %}
+                    {% for label, messages in app.flashes(['warning', 'danger', 'success', 'info', 'secondary']) %}
                         {% for message in messages %}
                         <div class="col-12">
                             <div class="alert alert-{{label}} alert-dismissible fade show" role="alert">

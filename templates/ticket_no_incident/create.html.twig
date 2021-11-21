@@ -15,7 +15,7 @@
 			<div class="row">
 				<div class="col-12">
 					<h3 class="text-secondary">
-						<i class="fas fa-upload nav-icon"></i> Mettre à jour les tickets réseaux
+                        <i class="fas fa-save nav-icon"></i> Enregistrement d'un magasin sans incident ( Kit-4G installé )
 					</h3>
 				</div>
 			</div>
@@ -26,67 +26,6 @@
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">Tickets Proxi Ouverts (Fichier Excel)</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <form action="{{path('reseau_upload')}}" method="post" enctype="multipart/form-data">
-                                <div class="input-group">
-                                    {{form_widget(excelForm.file)}}
-                                    <div class="input-group-append">
-                                        <button class="btn btn-default" type="submit">
-                                            <i class="fas fa-upload"></i> Traiter
-                                        </button>
-                                    </div>
-                                </div>
-                                {{form_errors(excelForm.file)}}
-                                {{form_rest(excelForm)}}
-                            </form>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">Dernière mise à jour</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        {% if lastUpdatedDate[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
-                        <div class="card-body card-content bg-success d-flex">
-                            <h2 class="m-auto">
-                                <b>{{"now"|date("d/m/Y")}}</b>
-                            </h2>
-                        </div>
-                        {% else %}
-                        <div class="card-body card-content bg-info d-flex">
-                            <h2 class="m-auto">
-                                <b>{{lastUpdatedDate[0]["maxDate"]}}</b>
-                            </h2>
-                        </div>
-                        {% endif %}
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-				<div class="col-12">
-					<h4 class="text-secondary">
-						<i class="fas fa-save nav-icon"></i> Enregistrement d'un magasin sans incident ( Kit-4G installé )
-					</h4>
-				</div>
-			</div>
             <div class="row">
                 <div class="col-md-12">
                     {{ form_start(noIncidentForm) }}
@@ -162,9 +101,10 @@
                             <button type="submit" class="btn btn-success m-auto">
                                 <i class="fas fa-plus-circle"></i> Ajouter
                             </button>
+                            {{ form_rest(noIncidentForm) }}
                         </div>
                     </div>
-                    {{ form_start(noIncidentForm) }}
+                    {{ form_end(noIncidentForm) }}
                 </div>
             </div>
         </div>
