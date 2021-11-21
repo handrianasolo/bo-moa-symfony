@@ -212,7 +212,7 @@ class HomeController extends AbstractController
                     $ticketXlsx = $value['C'] . " " . $value['B'] .":00";
                     //dd($ticketXlsx);
                     //dd(in_array('954087 2020-12-07 10:37:00', $dbTickets));
-                    if(in_array($ticketXlsx, $noneResolvedTickets)) {
+                    if(in_array($ticketXlsx, $noneResolvedTickets) == true) {
                         $ticketIbm = $ticketIbmRepository->findOneBy([
                             'nIncident' => $value['C'],
                             'dateAffectation' => $value['B'] .":00"
@@ -242,9 +242,7 @@ class HomeController extends AbstractController
                         // clear ticket from $noneResolvedTickets
                         unset($noneResolvedTickets[array_search($ticketXlsx, $noneResolvedTickets)]);
                     
-                    } elseif(!in_array($ticketXlsx, $noneResolvedTickets)) {
-                        // clear ticket from $resolvedTickets
-                        unset($noneResolvedTickets[array_search($ticketXlsx, $noneResolvedTickets)]);
+                    } elseif(in_array($ticketXlsx, $noneResolvedTickets) == false) {
                         $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['C'].' - '.$value['B'].' a déjà été résolu.');
                     
                     } else {
