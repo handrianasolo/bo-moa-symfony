@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Ticketibm
- *
  * @ORM\Table(name="ticketsibm")
  * @ORM\Entity(repositoryClass=TicketIbmRepository::class)
  */
@@ -17,25 +16,23 @@ class TicketIbm
      *
      * @ORM\Id
      * @ORM\Column(name="nIncident", type="string", length=20, nullable=false)
-     * @ORM\GeneratedValue
      */
     private string $nIncident;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="dateAffectation", type="datetime", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="dateAffectation", type="string", nullable=false)
      */
-    private \DateTime $dateAffectation;
+    private string $dateAffectation;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateCreation", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateCreation;
+    private ?\DateTimeInterface $dateCreation;
 
     /**
      * @var string|null
@@ -157,11 +154,11 @@ class TicketIbm
     private ?string $typeMagasin;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="dateMaj", type="datetime", nullable=true)
      */
-    private ?\DateTime $dateMaj;
+    private ?\DateTimeInterface $dateMaj;
 
     /**
      * @var string
@@ -170,30 +167,36 @@ class TicketIbm
      */
     private string $etatTicket = 'NON_RESOLU';
 
-    public function __construct()
-    {
-        $this->dateAffectation = new \DateTime();
-        $this->dateCreation = new \DateTime();
-        $this->dateMaj = new \DateTime();
-    }
-
-
     public function getNIncident(): ?string
     {
         return $this->nIncident;
     }
 
-    public function getDateAffectation(): ?\DateTime
+    public function setNIncident(string $nIncident): self
     {
-        return $this->dateAffectation;
+        $this->nIncident = $nIncident;
+
+        return $this;
     }
 
-    public function getDateCreation(): ?\DateTime
+    public function getDateAffectation(): ?\DateTimeInterface
+    {
+        return \DateTime::createFromFormat('Y-m-d H:i:s', $this->dateAffectation);
+    }
+
+    public function setDateAffectation(\DateTimeInterface $dateAffectation): self
+    {
+        $this->dateAffectation = $dateAffectation->format('Y-m-d H:i:s');
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTime $dateCreation): self
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
 
@@ -404,12 +407,12 @@ class TicketIbm
         return $this;
     }
 
-    public function getDateMaj(): ?\DateTime
+    public function getDateMaj(): ?\DateTimeInterface
     {
         return $this->dateMaj;
     }
 
-    public function setDateMaj(\DateTime $dateMaj): self
+    public function setDateMaj(\DateTimeInterface $dateMaj): self
     {
         $this->dateMaj = $dateMaj;
 
