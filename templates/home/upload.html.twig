@@ -3,29 +3,15 @@
 {% block title %}{{ parent() }}{% endblock %}
 
 {% block body %}
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-		<!-- container-fluid -->
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-12">
-					<h3 class="text-secondary">
-                        <i class="fas fa-file-upload"></i> Mise à jour
-					</h3>
-				</div>
-			</div>
-		</div>
-		<!-- /.container-fluid -->
-    </div>
     <!-- Main content -->
     <div class="content">
         <!-- tickets reseaux -->
         <div class="container-fluid">
             <div class="row">
 				<div class="col-12">
-					<h4 class="text-secondary">
+					<h5 class="text-secondary">
 						<i class="fas fa-wifi nav-icon"></i> Tickets réseaux
-					</h4>
+					</h5>
 				</div>
 			</div>
             <div class="row">
@@ -40,7 +26,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body card-content">
-                            <form method="post" action="{{path('home')}}" enctype="multipart/form-data">
+                            <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
                                 <div class="input-group">
                                     {{form_widget(excelReseauForm.file)}}
                                     <div class="input-group-append">
@@ -143,9 +129,9 @@
         <div class="container-fluid">
             <div class="row">
 				<div class="col-12">
-					<h4 class="text-secondary pull-right">
+					<h5 class="text-secondary pull-right">
 						<i class="fas fa-ticket-alt nav-icon"></i> Tickets IBM
-					</h4>
+					</h5>
 				</div>
 			</div>
             <div class="row">
@@ -160,7 +146,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body card-content">
-                        <form method="post" action="{{path('home')}}" enctype="multipart/form-data">
+                        <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
                             <div class="input-group">
                                 {{form_widget(excelIbmForm.file)}}
                                 <div class="input-group-append">

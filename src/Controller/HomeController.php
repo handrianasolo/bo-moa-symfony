@@ -8,6 +8,7 @@ use App\Form\IBMXLSXFormType;
 use App\Form\ReseauXLSXFormType;
 use App\Repository\TicketIbmRepository;
 use App\Repository\TicketReseauRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
 // Include PhpSpreadsheet
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
+/**
+ * Require ROLE_ADMIN for *every* controller method in this class.
+ *
+ * @IsGranted("ROLE_ADMIN")
+*/
 class HomeController extends AbstractController
 {
-    private function convertFRdatetimeToUS (string $datetime): string
+    protected function convertFRdatetimeToUS (string $datetime): string
     {
         $dateAndTime = explode(" ", $datetime);	
         $date = explode("/", $dateAndTime[0]);
@@ -29,17 +35,14 @@ class HomeController extends AbstractController
         return  $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $dateAndTime[1]; 
     } 
 
-    private function convertUSdatetimeToFR(string $datetime): string
+    protected function convertUSdatetimeToFR(string $datetime): string
     {
         $dateAndTime = explode(" ", $datetime);	
         $date = explode("-", $dateAndTime[0]);
         return $date[2] . "/" . $date[1] . "/" . $date[0] . " " .$dateAndTime[1];
     }
 
-    /**
-     * get data in database
-     */
-    private function getReseauData(TicketReseauRepository $ticketReseauRepository): array
+    protected function getReseauData(TicketReseauRepository $ticketReseauRepository): array
     {
         $dbTickets = array();
         $tickets = $ticketReseauRepository->findByOpenedTreatedAndToClose();
@@ -56,7 +59,7 @@ class HomeController extends AbstractController
         return $dbTickets;
     }
 
-    private function getIbmData(TicketIbmRepository $ticketIbmRepository, string $etatTicket): array
+    protected function getIbmData(TicketIbmRepository $ticketIbmRepository, string $etatTicket): array
     {
         $dbTickets = array();
         $tickets = $ticketIbmRepository->findByNoneResolvedOrResolved($etatTicket);
@@ -69,7 +72,7 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/", name="home", methods={"GET","POST"})
+     * @Route("/", name="upload", methods={"GET","POST"})
      */
     public function index(Request $request, TicketReseauRepository $ticketReseauRepository, TicketIbmRepository $ticketIbmRepository): Response
     {
@@ -103,51 +106,57 @@ class HomeController extends AbstractController
                 //dd($sheetData); 
                 $dbTickets = $this->getReseauData($ticketReseauRepository);
                 //dd($dbTickets);
+
                 foreach($sheetData as $key => $value) {
-                    //dd(array_key_exists(441860, $dbTickets));
-                    if(array_key_exists($value['B'], $dbTickets)) {
-                        //dd($dbTickets[$value['B']][0]);
-                        // get current reseau ticket contained in db
-                        $ticketReseau = $ticketReseauRepository->find($value['B']);
-                        //dd($ticketReseau);
-                        if($dbTickets[$value['B']][0] == 'Ticket_ouvert') {
-                            $ticketReseau->setDateMaj(new \DateTime());
-                            $this->getDoctrine()->getManager()->flush();
-                            // generate a success message
-                            $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Ticket ouvert depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][1]).' .');
-                        
-                        } elseif($dbTickets[$value['B']][0] == 'Ticket_traité') {
-                            $ticketReseau->setDateMaj(new \DateTime());
-                            $this->getDoctrine()->getManager()->flush();
-                            // generate a success message
-                            $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Kit 4G installé depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][2]).' .');
+
+                    if(is_null($value['B']) == false) {
+
+                        //dd(array_key_exists(441860, $dbTickets));
+                        if(array_key_exists($value['B'], $dbTickets)) {
+                            //dd($dbTickets[$value['B']][0]);
+                            // get current reseau ticket contained in db
+                            $ticketReseau = $ticketReseauRepository->find($value['B']);
+                            //dd($ticketReseau);
+                            if($dbTickets[$value['B']][0] == 'Ticket_ouvert') {
+                                $ticketReseau->setDateMaj(new \DateTime());
+                                $this->getDoctrine()->getManager()->flush();
+                                // generate a success message
+                                $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Ticket ouvert depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][1]).' .');
+                            
+                            } elseif($dbTickets[$value['B']][0] == 'Ticket_traité') {
+                                $ticketReseau->setDateMaj(new \DateTime());
+                                $this->getDoctrine()->getManager()->flush();
+                                // generate a success message
+                                $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Kit 4G installé depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][2]).' .');
+                            
+                            } else {
+                                $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['B'].' a déjà été clôturé.');
+                            }
+
+                            //clean temp ticket from temp tickets array
+                            unset($dbTickets[$value['B']]);
                         
                         } else {
-                            $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['B'].' a déjà été clôturé.');
+                            
+                            $ticketReseau = new TicketReseau();
+                            //dd($value['B']);
+                            $ticketReseau->setNTicket(strval($value['B']))
+                                        ->setDateCreation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['A'])))))
+                                        ->setCodeIncident(strval($value['C']))
+                                        ->setHistorique(strval($value['D']))
+                                        ->setTypeMagasin(strval($value['E']))
+                                        ->setCodeMagasin(strval($value['F']))
+                                        ->setNomMagasin(strval($value['G']))
+                                        ->setDescription(strval($value['H']))
+                                        ->setCodeMaintneur(strval($value['I']))
+                                        ->setDateMaj(new \DateTime())
+                                        ->setEtatTicket('Ticket_ouvert');
+                            // persist object
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $entityManager->persist($ticketReseau);
+                            $entityManager->flush();
+                            $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['B'].' vient d\'être ajouté.');
                         }
-
-                        //clean temp ticket from temp tickets array
-					    unset($dbTickets[$value['B']]);
-                    
-                    } else {
-                        $ticketReseau = new TicketReseau();
-                        //dd($value['B']);
-                        $ticketReseau->setNTicket(strval($value['B']))
-                                    ->setDateCreation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['A'])))))
-                                    ->setCodeIncident(strval($value['C']))
-                                    ->setHistorique(strval($value['D']))
-                                    ->setTypeMagasin(strval($value['E']))
-                                    ->setCodeMagasin(strval($value['F']))
-                                    ->setNomMagasin(strval($value['G']))
-                                    ->setDescription(strval($value['H']))
-                                    ->setCodeMaintneur(strval($value['I']))
-                                    ->setDateMaj(new \DateTime())
-                                    ->setEtatTicket('Ticket_ouvert');
-                        // persist object
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($ticketReseau);
-                        $entityManager->flush();
-                        $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['B'].' vient d\'être ajouté.');
                     }
                 }
 
@@ -187,7 +196,7 @@ class HomeController extends AbstractController
                 $this->addFlash('danger', 'Le nom du fichier n\'est pas valide. Merci de le vérifier. (Ex : FINAL_Rapport_Backlogs_Tickets_Reseau_Proxi_Kit4G_Prod.xlsx)');
             }
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('upload');
         }
 
         // upload and extract ibm excel file data
@@ -205,18 +214,54 @@ class HomeController extends AbstractController
                 //dd($sheetData); 
                 $noneResolvedTickets = $this->getIbmData($ticketIbmRepository, 'NON_RESOLU');
                 //dd($noneResolvedTickets);
+                $resolvedTickets = $this->getIbmData($ticketIbmRepository, 'RESOLU');
 
                 foreach($sheetData as $key => $value) {
-                    $ticketXlsx = $value['C'] . " " . $value['B'] .":00";
-                    //dd($ticketXlsx);
-                    //dd(in_array('954087 2020-12-07 10:37:00', $dbTickets));
-                    if(in_array($ticketXlsx, $noneResolvedTickets) == true) {
-                        $ticketIbm = $ticketIbmRepository->findOneBy([
-                            'nIncident' => $value['C'],
-                            'dateAffectation' => $value['B'] .":00"
-                        ]);
-                        //dd($ticketIbm);
-                        $ticketIbm->setDescription($value['D'])
+
+                    if(is_null($value['C']) == false) {
+
+                        $ticketXlsx = $value['C'] . " " . $this->convertFRdatetimeToUS($value['B']);
+                        //dd($ticketXlsx);
+                        //dd(in_array('954087 2020-12-07 10:37:00', $dbTickets));
+                        if(in_array($ticketXlsx, $noneResolvedTickets) == true) {
+                            $ticketIbm = $ticketIbmRepository->findOneBy([
+                                'nIncident' => $value['C'],
+                                'dateAffectation' => $this->convertFRdatetimeToUS($value['B'])
+                            ]);
+                            //dd($ticketIbm);
+                            $ticketIbm->setDescription($value['D'])
+                                    ->setEtatIncident($value['E'])
+                                    ->setImpact($value['F'])
+                                    ->setUrgence($value['G'])
+                                    ->setPriorite($value['H'])
+                                    ->setNbRelances($value['I'])
+                                    ->setIncidentAffectedAt($value['J'])
+                                    ->setNTache($value['K'])
+                                    ->setTacheAffectedAt($value['L'])
+                                    ->setSujetTache($value['M'])
+                                    ->setDetailsTache($value['N'])
+                                    ->setTypeEquipement($value['O'])
+                                    ->setTypeLogiciel($value['P'])
+                                    ->setNomEquipement($value['Q'])
+                                    ->setCodeMagasin($value['R'])
+                                    ->setNomMagasin($value['S'])
+                                    ->setTypeMagasin($value['T'])
+                                    ->setDateMaj(new \DateTime());
+                            $this->getDoctrine()->getManager()->flush();
+                            $this->addFlash('warning', '-- MISE A JOUR -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être mis à jour.');
+                        
+                            // clear ticket from $noneResolvedTickets
+                            unset($noneResolvedTickets[array_search($ticketXlsx, $noneResolvedTickets)]);
+                        
+                        } elseif(in_array($ticketXlsx, $resolvedTickets) == true) {
+                            $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['C'].' - '.$value['B'].' a déjà été résolu.');
+                        
+                        } else {
+                            $ticketIbm = new TicketIbm();
+                            $ticketIbm->setNIncident($value['C'])
+                                ->setDateAffectation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['B'])))))
+                                ->setDateCreation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['A'])))))
+                                ->setDescription($value['D'])
                                 ->setEtatIncident($value['E'])
                                 ->setImpact($value['F'])
                                 ->setUrgence($value['G'])
@@ -233,46 +278,15 @@ class HomeController extends AbstractController
                                 ->setCodeMagasin($value['R'])
                                 ->setNomMagasin($value['S'])
                                 ->setTypeMagasin($value['T'])
-                                ->setDateMaj(new \DateTime());
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('warning', '-- MISE A JOUR -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être mis à jour.');
-                    
-                        // clear ticket from $noneResolvedTickets
-                        unset($noneResolvedTickets[array_search($ticketXlsx, $noneResolvedTickets)]);
-                    
-                    } elseif(in_array($ticketXlsx, $noneResolvedTickets) == false) {
-                        $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['C'].' - '.$value['B'].' a déjà été résolu.');
-                    
-                    } else {
-                        $ticketIbm = new TicketIbm();
-                        $ticketIbm->setNIncident($value['C'])
-                            ->setDateAffectation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['B'])))))
-                            ->setDateCreation(new \DateTime(date("Y-m-d H:i:s", strtotime($this->convertFRdatetimeToUS($value['A'])))))
-                            ->setDescription($value['D'])
-                            ->setEtatIncident($value['E'])
-                            ->setImpact($value['F'])
-                            ->setUrgence($value['G'])
-                            ->setPriorite($value['H'])
-                            ->setNbRelances($value['I'])
-                            ->setIncidentAffectedAt($value['J'])
-                            ->setNTache($value['K'])
-                            ->setTacheAffectedAt($value['L'])
-                            ->setSujetTache($value['M'])
-                            ->setDetailsTache($value['N'])
-                            ->setTypeEquipement($value['O'])
-                            ->setTypeLogiciel($value['P'])
-                            ->setNomEquipement($value['Q'])
-                            ->setCodeMagasin($value['R'])
-                            ->setNomMagasin($value['S'])
-                            ->setTypeMagasin($value['T'])
-                            ->setDateMaj(new \DateTime())
-                            ->setEtatTicket('NON_RESOLU');
-                        // persist object
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($ticketIbm);
-                        $entityManager->flush();
-                        $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être ajouté.');
-                    
+                                ->setDateMaj(new \DateTime())
+                                ->setEtatTicket('NON_RESOLU');
+                            // persist object
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $entityManager->persist($ticketIbm);
+                            $entityManager->flush();
+                            $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être ajouté.');
+                        
+                        }
                     }
                 }
 
@@ -293,14 +307,17 @@ class HomeController extends AbstractController
                     unset($noneResolvedTickets[$key]);
                 }
 
+                //clear ticket from $resolvedTickets
+                unset($resolvedTickets);
+
             } else {
                 $this->addFlash('danger', 'Le nom du fichier n\'est pas valide. Merci de le vérifier. (Ex : Rapport_Backlog_SERCA_Proxi_Jour.xlsx)');
             }
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('upload');
         }
 
-        return $this->render('home/home.html.twig', [
+        return $this->render('home/upload.html.twig', [
             'openedTickets' => $openedTickets,
             'treatedTickets' => $treatedTickets,
             'closedTickets' => $closedTickets,

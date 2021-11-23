@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Repository\TicketIbmRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/ibm")
+ * 
+ * @IsGranted("ROLE_ADMIN")
  */
 class TicketIbmController extends AbstractController
 {
@@ -87,7 +90,7 @@ class TicketIbmController extends AbstractController
     }
 
     /**
-     * @Route("/recherche-avancé", name="ibm_search", methods={"GET"})
+     * @Route("/recherche-avance", name="ibm_search", methods={"GET"})
      */
     public function search(TicketIbmRepository $ticketIbmRepository): Response
     {
