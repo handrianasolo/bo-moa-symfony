@@ -5,295 +5,399 @@
 {% block body %}
     <!-- Main content -->
     <div class="content">
-        <!-- tickets reseaux -->
         <div class="container-fluid">
-            <div class="row">
+            <!-- tickets reseaux -->
+			<div class="row">
 				<div class="col-12">
-					<h5 class="text-secondary">
-						<i class="fas fa-wifi nav-icon"></i> Tickets réseaux
-					</h5>
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title w-100">
+								<a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+									<center><strong>Tickets réseaux</strong></center>
+								</a>
+							</h3>
+						</div>
+						<div id="collapseOne" class="collapse show">
+							<div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="card card-container card-outline card-primary">
+                                                            <div class="card-header d-flex">
+                                                                <h3 class="card-title m-auto">
+                                                                    <strong>Tickets Proxi Ouverts (Fichier Excel)</strong>
+                                                                </h3>
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            <div class="card-body card-content">
+                                                                <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
+                                                                    <div class="input-group">
+                                                                        {{form_widget(excelReseauForm.file)}}
+                                                                        <div class="input-group-append">
+                                                                            <button class="btn btn-dark" type="submit">
+                                                                                <i class="fas fa-upload"></i> Traiter
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{form_rest(excelReseauForm)}}
+                                                                </form>
+                                                            </div>
+                                                            <!-- /.card-body -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.card -->
+                                                    <div class="col-md-6">
+                                                        <!-- general form elements -->
+                                                        <div class="card card-container card-outline card-primary">
+                                                            <div class="card-header d-flex">
+                                                                <h3 class="card-title m-auto">
+                                                                    <strong>Dernière mise à jour</strong>
+                                                                </h3>
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            {% if lastUpdatedDateReseau[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
+                                                            <div class="card-body card-content bg-success d-flex">
+                                                                <h2 class="m-auto">
+                                                                    <b>{{"now"|date("d/m/Y")}}</b>
+                                                                </h2>
+                                                            </div>
+                                                            {% else %}
+                                                            <div class="card-body card-content bg-danger d-flex">
+                                                                <h2 class="m-auto">
+                                                                    <b>{{lastUpdatedDateReseau[0]["maxDate"]}}</b>
+                                                                </h2>
+                                                            </div>
+                                                            {% endif %}
+                                                            <!-- /.card-body -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.card -->
+                                                    <div class="col-md-6" style="height: 400px; overflow: auto;">
+                                                        {% for message in app.flashes('majKit') %}
+                                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- MISE A JOUR -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('newKit') %}
+                                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- NOUVEAU TICKET -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('infoKit') %}
+                                                            <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- INFORMATION -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('kitResolved') %}
+                                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- TICKET RESOLU -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('takeKit') %}
+                                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- KIT A RETIRER -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <!-- opened tickets -->
+                                                        <div class="small-box bg-danger">
+                                                            <div class="inner">
+                                                                <div class="infos">
+                                                                    {% if openedTickets|length > 0 %}
+                                                                    <h3>{{openedTickets|length}}</h3>
+                                                                    {% else %}
+                                                                    <h3>0</h3>
+                                                                    {% endif %}
+                                                                    <p class="txt-info">Tickets ouverts</p>  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- treated tickets -->
+                                                        <div class="small-box bg-success">
+                                                            <div class="inner">
+                                                                <div class="infos">
+                                                                    {% if treatedTickets|length > 0 %}
+                                                                    <h3>{{treatedTickets|length}}</h3>
+                                                                    {% else %}
+                                                                    <h3>0</h3>
+                                                                    {% endif %}
+                                                                    <p class="txt-info">Tickets traités</p>  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- closed tickets -->
+                                                        <div class="small-box bg-warning">
+                                                            <div class="inner">
+                                                                <div class="infos">
+                                                                    {% if closedTickets|length > 0 %}
+                                                                    <h3>{{closedTickets|length}}</h3>
+                                                                    {% else %}
+                                                                    <h3>0</h3>
+                                                                    {% endif %}
+                                                                    <p class="txt-info">Tickets à clôturer</p>  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+					</div>
+					<!-- /.card -->
 				</div>
+				<!-- /.col -->
 			</div>
+            <!-- tickets ibm -->
             <div class="row">
-                <!-- left column -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">
-                                <strong>Tickets Proxi Ouverts (Fichier Excel)</strong>
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title w-100">
+                                <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                                    <center><strong>Tickets IBM</strong></center>
+                                </a>
                             </h3>
                         </div>
-                        <!-- /.card-header -->
-                        <div class="card-body card-content">
-                            <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
-                                <div class="input-group">
-                                    {{form_widget(excelReseauForm.file)}}
-                                    <div class="input-group-append">
-                                        <button class="btn btn-default" type="submit">
-                                            <i class="fas fa-upload"></i> Traiter
-                                        </button>
-                                    </div>
-                                </div>
-                                {{form_rest(excelReseauForm)}}
-                            </form>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">
-                                <strong>Dernière mise à jour</strong>
-                            </h3>
-                        </div>
-                        <!-- /.card-header -->
-                        {% if lastUpdatedDateReseau[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
-                        <div class="card-body card-content bg-primary d-flex">
-                            <h2 class="m-auto">
-                                <b>{{"now"|date("d/m/Y")}}</b>
-                            </h2>
-                        </div>
-                        {% else %}
-                        <div class="card-body card-content bg-light d-flex">
-                            <h2 class="m-auto">
-                                <b>{{lastUpdatedDateReseau[0]["maxDate"]}}</b>
-                            </h2>
-                        </div>
-                        {% endif %}
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <!-- opened tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-danger">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if openedTickets|length > 0 %}
-                                                <h3>{{openedTickets|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets ouverts</p>  
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- treated tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-success">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if treatedTickets|length > 0 %}
-                                                <h3>{{treatedTickets|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets traités</p>  
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- closed tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-warning">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if closedTickets|length > 0 %}
-                                                <h3>{{closedTickets|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets à clôturer</p>  
-                                            </div>
+                        <div id="collapseTwo" class="collapse show">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <!-- general form elements -->
+                                                        <div class="card card-container card-outline card-primary">
+                                                            <div class="card-header d-flex">
+                                                                <h3 class="card-title m-auto">
+                                                                    <center><strong>Tickets IBM Ouverts (Fichier Excel)</strong></center>
+                                                                </h3>
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            <div class="card-body card-content">
+                                                            <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
+                                                                <div class="input-group">
+                                                                    {{form_widget(excelIbmForm.file)}}
+                                                                    <div class="input-group-append">
+                                                                        <button class="btn btn-dark" type="submit">
+                                                                            <i class="fas fa-upload"></i> Traiter
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                {{form_rest(excelIbmForm)}}
+                                                            </form>
+                                                            </div>
+                                                            <!-- /.card-body -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.card -->
+                                                    <div class="col-md-6">
+                                                        <!-- general form elements -->
+                                                        <div class="card card-container card-outline card-primary">
+                                                            <div class="card-header d-flex">
+                                                                <h3 class="card-title m-auto">
+                                                                    <strong>Dernière mise à jour</strong>
+                                                                </h3>
+                                                            </div>
+                                                            <!-- /.card-header -->
+                                                            {% if lastUpdatedDateIbm[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
+                                                            <div class="card-body card-content bg-success d-flex">
+                                                                <h2 class="m-auto">
+                                                                    <b>{{"now"|date("d/m/Y")}}</b>
+                                                                </h2>
+                                                            </div>
+                                                            {% else %}
+                                                            <div class="card-body card-content bg-danger d-flex">
+                                                                <h2 class="m-auto">
+                                                                    <b>{{lastUpdatedDateIbm[0]["maxDate"]}}</b>
+                                                                </h2>
+                                                            </div>
+                                                            {% endif %}
+                                                            <!-- /.card-body -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.card -->
+                                                    <div class="col-md-6" style="height: 500px; overflow: auto;">
+                                                        {% for message in app.flashes('majIbm') %}
+                                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                            <i class="fas fa-exclamation-triangle"></i> 
+                                                            <strong>-- MISE A JOUR -- </strong>{{ message }}
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('newIbm') %}
+                                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- NOUVEAU TICKET -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('infoIbm') %}
+                                                            <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- INFORMATION -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% for message in app.flashes('ibmResolved') %}
+                                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                                <i class="fas fa-exclamation-triangle"></i> 
+                                                                <strong>-- TICKET RESOLU -- </strong>{{ message }}
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <!-- high impact tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-danger">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if impactHigh|length > 0 %}
+                                                                            <h3>{{impactHigh|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>  
+                                                                            <p class="txt-info">Impact élevé</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- high urgence tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-danger">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if urgenceHigh|length > 0 %}
+                                                                            <h3>{{urgenceHigh|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>  
+                                                                            <p class="txt-info">Urgence élevée</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!-- medieum impact tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-success">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if impactMedium|length > 0 %}
+                                                                            <h3>{{impactMedium|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>  
+                                                                            <p class="txt-info">Impact moyen</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- medium urgence tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-success">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if urgenceMedium|length > 0 %}
+                                                                            <h3>{{urgenceMedium|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>
+                                                                            <p class="txt-info">Urgence moyenne</p>  
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!-- low impact tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-warning">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if impactLow|length > 0 %}
+                                                                            <h3>{{impactLow|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>  
+                                                                            <p class="txt-info">Impact faible</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- low urgence tickets -->
+                                                            <div class="col">
+                                                                <div class="small-box bg-warning">
+                                                                    <div class="inner">
+                                                                        <div class="infos">
+                                                                            {% if urgenceLow|length > 0 %}
+                                                                            <h3>{{urgenceLow|length}}</h3>
+                                                                            {% else %}
+                                                                            <h3>0</h3>
+                                                                            {% endif %}
+                                                                            <p class="txt-info">Tickets non résolus</p>  
+                                                                            <p class="txt-info">Urgence faible</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /.card -->
                 </div>
-            </div>
-        </div>
-        <!-- tickets ibm -->
-        <div class="container-fluid">
-            <div class="row">
-				<div class="col-12">
-					<h5 class="text-secondary pull-right">
-						<i class="fas fa-ticket-alt nav-icon"></i> Tickets IBM
-					</h5>
-				</div>
-			</div>
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">
-                                <strong>Tickets IBM Ouverts (Fichier Excel)</strong>
-                            </h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body card-content">
-                        <form method="post" action="{{path('upload')}}" enctype="multipart/form-data">
-                            <div class="input-group">
-                                {{form_widget(excelIbmForm.file)}}
-                                <div class="input-group-append">
-                                    <button class="btn btn-default" type="submit">
-                                        <i class="fas fa-upload"></i> Traiter
-                                    </button>
-                                </div>
-                            </div>
-                            {{form_rest(excelIbmForm)}}
-                        </form>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="card card-container card-outline card-primary">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title m-auto">
-                                <strong>Dernière mise à jour</strong>
-                            </h3>
-                        </div>
-                        <!-- /.card-header -->
-                        {% if lastUpdatedDateIbm[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
-                        <div class="card-body card-content bg-primary d-flex">
-                            <h2 class="m-auto">
-                                <b>{{"now"|date("d/m/Y")}}</b>
-                            </h2>
-                        </div>
-                        {% else %}
-                        <div class="card-body card-content bg-light d-flex">
-                            <h2 class="m-auto">
-                                <b>{{lastUpdatedDateIbm[0]["maxDate"]}}</b>
-                            </h2>
-                        </div>
-                        {% endif %}
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <!-- high impact tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-danger">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if impactHigh|length > 0 %}
-                                                <h3>{{impactHigh|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>  
-                                                <p class="txt-info">Impact élevé</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- medieum impact tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-success">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if impactMedium|length > 0 %}
-                                                <h3>{{impactMedium|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>  
-                                                <p class="txt-info">Impact moyen</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- low impact tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-warning">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if impactLow|length > 0 %}
-                                                <h3>{{impactLow|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>  
-                                                <p class="txt-info">Impact faible</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- high urgence tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-danger">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if urgenceHigh|length > 0 %}
-                                                <h3>{{urgenceHigh|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>  
-                                                <p class="txt-info">Urgence élevée</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- medium urgence tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-success">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if urgenceMedium|length > 0 %}
-                                                <h3>{{urgenceMedium|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>
-                                                <p class="txt-info">Urgence moyenne</p>  
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- low urgence tickets -->
-                                <div class="col-lg-4">
-                                    <div class="small-box bg-warning">
-                                        <div class="inner">
-                                            <div class="infos">
-                                                {% if urgenceLow|length > 0 %}
-                                                <h3>{{urgenceLow|length}}</h3>
-                                                {% else %}
-                                                <h3>0</h3>
-                                                {% endif %}
-                                                <p class="txt-info">Tickets non résolus</p>  
-                                                <p class="txt-info">Urgence faible</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- /.col -->
             </div>
         </div>
     </div>

@@ -121,16 +121,16 @@ class HomeController extends AbstractController
                                 $ticketReseau->setDateMaj(new \DateTime());
                                 $this->getDoctrine()->getManager()->flush();
                                 // generate a success message
-                                $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Ticket ouvert depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][1]).' .');
+                                $this->addFlash('majKit','Le ticket '.$value['B'].' vient d\'être mis à jour | Ticket ouvert depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][1]).' .');
                             
                             } elseif($dbTickets[$value['B']][0] == 'Ticket_traité') {
                                 $ticketReseau->setDateMaj(new \DateTime());
                                 $this->getDoctrine()->getManager()->flush();
                                 // generate a success message
-                                $this->addFlash('warning','-- MISE A JOUR -- Le ticket '.$value['B'].' vient d\'être mis à jour | Kit 4G installé depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][2]).' .');
+                                $this->addFlash('majKit','Le ticket '.$value['B'].' vient d\'être mis à jour | Kit 4G installé depuis '.$this->convertUSdatetimeToFR($dbTickets[$value['B']][2]).' .');
                             
                             } else {
-                                $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['B'].' a déjà été clôturé.');
+                                $this->addFlash('infoKit', 'Le ticket '.$value['B'].' a déjà été clôturé.');
                             }
 
                             //clean temp ticket from temp tickets array
@@ -155,7 +155,7 @@ class HomeController extends AbstractController
                             $entityManager = $this->getDoctrine()->getManager();
                             $entityManager->persist($ticketReseau);
                             $entityManager->flush();
-                            $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['B'].' vient d\'être ajouté.');
+                            $this->addFlash('newKit', 'Le ticket '.$value['B'].' vient d\'être ajouté.');
                         }
                     }
                 }
@@ -169,23 +169,23 @@ class HomeController extends AbstractController
                                     ->setEtatTicket('Ticket_archivé');
                         $this->getDoctrine()->getManager()->flush();
                         // generate a success message
-                        $this->addFlash('info','-- TICKET RÉSOLU -- Le ticket '.$key.' est résolu sans intervention, il sera archivé automatiquement.');
+                        $this->addFlash('kitResolved','Le ticket '.$key.' est résolu sans intervention, il sera archivé automatiquement.');
                     
                     } elseif($dbTickets[$key][0] == 'Ticket_traité') {
                         $ticketReseau->setDateMaj(new \DateTime())
                                     ->setEtatTicket('Ticket_a_fermer');
                         $this->getDoctrine()->getManager()->flush();
                         // generate a success message
-                        $this->addFlash('danger','-- Kit 4G A RETIRER -- Le ticket '.$key.' est résolu, merci de retirer le Kit 4G en magasin.');
+                        $this->addFlash('takeKit','Le ticket '.$key.' est résolu, merci de retirer le Kit 4G en magasin.');
                     
                     } elseif($dbTickets[$key][0] == 'Ticket_a_fermer') {
                         $ticketReseau->setDateMaj(new \DateTime());
                         $this->getDoctrine()->getManager()->flush();
                         // generate a success message
-                        $this->addFlash('danger','-- Kit 4G A RETIRER -- Le ticket '.$key.' vient d\'être mis à jour | Merci de retirer le kit 4G du magasin.');
+                        $this->addFlash('takeKit','Le ticket '.$key.' vient d\'être mis à jour | Merci de retirer le kit 4G du magasin.');
                     
                     } else {
-                        $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$key.' a déjà été clôturé.');
+                        $this->addFlash('infoKit', 'Le ticket '.$key.' a déjà été clôturé.');
                     }
 
                     //clean temp ticket from temp tickets array
@@ -195,6 +195,8 @@ class HomeController extends AbstractController
             } else {
                 $this->addFlash('danger', 'Le nom du fichier n\'est pas valide. Merci de le vérifier. (Ex : FINAL_Rapport_Backlogs_Tickets_Reseau_Proxi_Kit4G_Prod.xlsx)');
             }
+
+            $this->addFlash('secondary', 'Le fichier Excel a bien été traité.');
 
             return $this->redirectToRoute('upload');
         }
@@ -248,13 +250,13 @@ class HomeController extends AbstractController
                                     ->setTypeMagasin($value['T'])
                                     ->setDateMaj(new \DateTime());
                             $this->getDoctrine()->getManager()->flush();
-                            $this->addFlash('warning', '-- MISE A JOUR -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être mis à jour.');
+                            $this->addFlash('majIbm', 'Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être mis à jour.');
                         
                             // clear ticket from $noneResolvedTickets
                             unset($noneResolvedTickets[array_search($ticketXlsx, $noneResolvedTickets)]);
                         
                         } elseif(in_array($ticketXlsx, $resolvedTickets) == true) {
-                            $this->addFlash('secondary', '-- INFORMATION -- Le ticket '.$value['C'].' - '.$value['B'].' a déjà été résolu.');
+                            $this->addFlash('infoIbm', 'Le ticket '.$value['C'].' - '.$value['B'].' a déjà été résolu.');
                         
                         } else {
                             $ticketIbm = new TicketIbm();
@@ -284,7 +286,7 @@ class HomeController extends AbstractController
                             $entityManager = $this->getDoctrine()->getManager();
                             $entityManager->persist($ticketIbm);
                             $entityManager->flush();
-                            $this->addFlash('success', '-- NOUVEAU TICKET -- Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être ajouté.');
+                            $this->addFlash('newIbm', 'Le ticket '.$value['C'].' - '.$value['B'].' vient d\'être ajouté.');
                         
                         }
                     }
@@ -301,7 +303,7 @@ class HomeController extends AbstractController
                     $ticketIbm->setDateMaj(new \DateTime())
                             ->setEtatTicket('RESOLU');
                     $this->getDoctrine()->getManager()->flush();
-                    $this->addFlash('info', '-- TICKET RESOLU -- Le ticket '.$ticket[0].' - '.$this->convertUSdatetimeToFR($ticket[1]." ".$ticket[2]).' vient d\'être résolu.');
+                    $this->addFlash('ibmResolved', 'Le ticket '.$ticket[0].' - '.$this->convertUSdatetimeToFR($ticket[1]." ".$ticket[2]).' vient d\'être résolu.');
                     
                     //clear ticket from $noneResolvedTickets
                     unset($noneResolvedTickets[$key]);
@@ -313,6 +315,8 @@ class HomeController extends AbstractController
             } else {
                 $this->addFlash('danger', 'Le nom du fichier n\'est pas valide. Merci de le vérifier. (Ex : Rapport_Backlog_SERCA_Proxi_Jour.xlsx)');
             }
+
+            $this->addFlash('secondary', 'Le fichier Excel a bien été traité.');
 
             return $this->redirectToRoute('upload');
         }
