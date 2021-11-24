@@ -270,6 +270,9 @@
             "./config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "swiftmailer/swiftmailer": {
+        "version": "v6.3.0"
+    },
     "symfony/asset": {
         "version": "v5.3.4"
     },
@@ -556,6 +559,12 @@
     },
     "symfony/string": {
         "version": "v5.3.7"
+    },
+    "symfony/swiftmailer-bundle": {
+        "version": "3.5",
+        "recipe": {
+            "version": "2.5"
+        }
     },
     "symfony/translation": {
         "version": "5.3",
