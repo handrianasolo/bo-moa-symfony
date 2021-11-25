@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/mot-de-passe-oublier", name="app_forgotten_password")
      */
-    public function forgetPassword(Request $request, UserRepository $userRepository, \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator): Response
+    public function forgetPassword(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): Response
     {
         // On initialise le formulaire
         $form = $this->createForm(ResetPasswordFormType::class);
@@ -82,27 +82,8 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
     
-            // On génère l'URL de réinitialisation de mot de passe
-            $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
-    
-            // On génère l'e-mail
-            $message = (new \Swift_Message('Mot de passe oublié'))
-                ->setFrom('noreply@noreply.fr')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    "Bonjour,<br><br>Une demande de réinitialisation de mot de passe a été effectuée pour l'application web. Veuillez cliquer sur le lien suivant : " . $url,
-                    'text/html'
-                )
-            ;
-    
-            // On envoie l'e-mail
-            $mailer->send($message);
-    
-            // On crée le message flash de confirmation
-            $this->addFlash('success', 'E-mail de réinitialisation du mot de passe envoyé !');
-    
-            // On redirige vers la page de login
-            return $this->redirectToRoute('app_login');
+            // On redirige vers la page de changement de mot de passe
+            return $this->redirectToRoute('app_reset_password', ['token' => $user->getResetToken()]);
         }
     
         // On envoie le formulaire à la vue
