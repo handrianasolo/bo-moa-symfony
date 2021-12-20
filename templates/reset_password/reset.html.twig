@@ -1,0 +1,15 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="card-body">
+    <p class="mb-10">Veuillez entrer votre nouveau mot de passe</p>
+    {{ form_start(resetForm) }}
+    {{ form_widget(resetForm.plainPassword) }}
+    <button class="btn btn-success btn-block" type="submit">
+        Valider
+    </button>
+    {{ form_end(resetForm) }}
+</div>
+{% endblock %}

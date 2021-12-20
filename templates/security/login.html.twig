@@ -1,8 +1,9 @@
+
 {% extends 'index.html.twig' %}
 
 {% block title %}{{ parent() }}{% endblock %}
 
-{% block body %}
+{% block body %}                
 <div class="card-body">
     <p class="mb-10">Connectez-vous pour démarrer une nouvelle session</p>
     {# read and display just one flash message per type #}
@@ -38,9 +39,8 @@
             </div>
         </div>
         <div class="row">
-            <!-- /.col -->
             <div class="col-7">
-                <a href="{{path('app_forgotten_password')}}">Mot de passe oublié ?</a>
+                <a href="{{path('app_forgot_password_request')}}">Mot de passe oublié ?</a>
             </div>
             <div class="col-5">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -57,3 +57,4 @@
     <p class="card-text">Pour tout nouveau compte, merci de contacter l'administrateur : atrad@groupe-casino.fr</p>
 </div>
 {% endblock %}
+            

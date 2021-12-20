@@ -16,7 +16,7 @@ class UserFixtures extends Fixture
 
     public function __construct(EntityManagerInterface $manager, UserPasswordHasherInterface $passwordEncoder)
     {
-        $this->manager = $manager;
+        $this->manager = $manager;        
         $this->passwordEncoder = $passwordEncoder;
     }
 

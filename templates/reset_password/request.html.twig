@@ -4,12 +4,15 @@
 
 {% block body %}
 <div class="card-body">
-    <p class="mb-10">Veuillez entrer votre adresse e-mail</p>
-    <form action="{{ path('app_forgotten_password') }}" method="post">
+    <p class="mb-10">Veuillez entrer votre adresse e-mail et nous vous enverrons un lien pour modifier votre mot de passe</p>
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <form action="{{ path('app_forgot_password_request') }}" method="post">
         <div class="row">
             <div class="col-8">
                 <div class="input-group mb-3">
-                    {{ form_widget(emailForm.email) }}
+                    {{form_widget(requestForm.email)}}                    
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -23,7 +26,7 @@
                 </button>
             </div>
         </div>
-        {{form_rest(emailForm)}}
+        {{form_rest(requestForm)}}
     </form>
 </div>
 <!-- /.card-body -->
