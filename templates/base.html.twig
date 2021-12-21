@@ -64,7 +64,6 @@
                             {% elseif currentPath == "/" %}
                             Mise à jour des tickets
                             {% else %}
-                            Détails d'un ticket
                             {% endif %}
                         </a>
                     </li>
@@ -110,12 +109,22 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
-                            <li class="nav-header">ACCUEIL</li>
-                            <li class="nav-item">
-                                <a href="{{path('upload')}}" class="nav-link {{actual_route('upload',route)}}">
-                                    <i class="fas fa-file-upload nav-icon"></i>
-                                    <p>Mise à jour des tickets</p>
+                            <li class="nav-item menu-open">
+                                <a class="nav-link bg-secondary">
+                                    <i class="nav-icon fas fa-wifi"></i>
+                                    <p>
+                                        Accueil
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
                                 </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{path('upload')}}" class="nav-link {{actual_route('upload',route)}}">
+                                            <i class="fas fa-file-upload nav-icon"></i>
+                                            <p>Mise à jour des tickets</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-header">EQUIPE ENCAISSEMENT</li>
                             <li class="nav-item menu-open">
