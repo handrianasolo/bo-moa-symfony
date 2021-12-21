@@ -15,6 +15,8 @@
         <!-- Theme style -->
         <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
         <link rel="stylesheet" href="{{ asset('dist/css/style.css') }}">
+          <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
         <!-- Datepicker -->
         <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css') }}">
         <!-- DataTables -->
@@ -36,7 +38,7 @@
     * sidebar-collapse
     * sidebar-mini
     -->
-    <body class="hold-transition sidebar-mini">
+    <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper" style="background: #f4f6f9;">
             {% set route = app.request.attributes.get('_route') %}
             {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
@@ -55,6 +57,11 @@
                             Enregistrement
                             {% elseif currentPath == "/ibm/recherche-avance" %}
                             Recherche avancé
+                            {% elseif currentPath == "/ajout-nouvel-utilisateur" %}
+                            Ajouter un utilisateur
+                            {% elseif currentPath == "/mot-de-passe-oublier" 
+                                    or currentPath == "/reinitialisation-mot-de-passe/*" %}
+                            Changer mot de passe
                             {% elseif (currentPath == "/ibm/gestion-tickets/details/6-days") or (currentPath == "/ibm/gestion-tickets/details/5-days")
                                     or (currentPath == "/ibm/gestion-tickets/details/4-days") or (currentPath == "/ibm/gestion-tickets/details/3-days") 
                                     or (currentPath == "/ibm/gestion-tickets/details/2-days") or (currentPath == "/ibm/gestion-tickets/details/1-days") 
@@ -64,7 +71,6 @@
                             {% elseif currentPath == "/" %}
                             Mise à jour des tickets
                             {% else %}
-                            Détails d'un ticket
                             {% endif %}
                         </a>
                     </li>
@@ -86,7 +92,7 @@
             <!-- /.navbar -->
 
             <!-- Main Sidebar Container -->
-            <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed">
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
                 <a href="{{path('upload')}}" class="brand-link">
                     <img src="{{ asset('dist/img/admin-logo.png') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -110,12 +116,22 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
-                            <li class="nav-header">ACCUEIL</li>
-                            <li class="nav-item">
-                                <a href="{{path('upload')}}" class="nav-link {{actual_route('upload',route)}}">
-                                    <i class="fas fa-file-upload nav-icon"></i>
-                                    <p>Mise à jour des tickets</p>
+                            <li class="nav-item menu-open">
+                                <a class="nav-link bg-secondary">
+                                    <i class="nav-icon fas fa-file-upload"></i>
+                                    <p>
+                                        Accueil
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
                                 </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{path('upload')}}" class="nav-link {{actual_route('upload',route)}}">
+                                            <i class="fas fa-file-upload nav-icon"></i>
+                                            <p>Mise à jour des tickets</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-header">EQUIPE ENCAISSEMENT</li>
                             <li class="nav-item menu-open">
@@ -164,6 +180,32 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% if is_granted('ROLE_SUPADMIN') %}
+                            <li class="nav-header">ADMINISTRATION</li>
+                            <li class="nav-item menu-open">
+                                <a class="nav-link bg-secondary">
+                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    <p>
+                                        Paramètres
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{path('app_forgotten_password')}}" class="nav-link {{actual_route('app_forgotten_password',route)}}">
+                                            <i class="fas fa-user-edit nav-icon"></i>
+                                            <p>Changer mot de passe</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{path('app_register')}}" class="nav-link {{actual_route('app_register',route)}}">
+                                            <i class="fas fa-user-plus nav-icon"></i>
+                                            <p>Ajouter un utilisateur</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
                         </ul>
                     </nav>
                     <!-- /.sidebar-menu -->
@@ -210,7 +252,7 @@
         <!-- REQUIRED SCRIPTS -->
 
         <!-- AdminLTE App -->
-        <script src="dist/js/adminlte.js"></script>
+        <script src="{{ asset('dist/js/adminlte.js')}}"></script>
 
         <!-- jQuery -->
         <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -218,7 +260,8 @@
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <!-- AdminLTE -->
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
-
+        <!-- overlayScrollbars -->
+        <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
         <!-- Datepicker -->
         <script src="{{ asset('plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js') }}"></script>
         <!-- DataTables -->

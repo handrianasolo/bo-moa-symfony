@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\RegisterUserFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\UserRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -29,7 +31,10 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername, 
+            'error' => $error
+        ]);
     }
 
     /**
@@ -42,6 +47,8 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/mot-de-passe-oublier", name="app_forgotten_password")
+     * 
+     * @IsGranted("ROLE_SUPADMIN")
      */
     public function forgetPassword(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): Response
     {
@@ -65,7 +72,7 @@ class SecurityController extends AbstractController
                 $this->addFlash('danger', 'Cette adresse e-mail est inconnue.');
                 
                 // On retourne sur la page de connexion
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_forgotten_password');
             }
     
             // On génère un token
@@ -77,9 +84,10 @@ class SecurityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+
             } catch (\Exception $e) {
                 $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_forgotten_password');
             }
     
             // On redirige vers la page de changement de mot de passe
@@ -94,6 +102,8 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/reinitialisation-mot-de-passe/{token}", name="app_reset_password")
+     * 
+     * @IsGranted("ROLE_SUPADMIN")
      */
     public function resetPassword(Request $request, string $token, UserRepository $userRepository, UserPasswordHasherInterface $passwordEncoder)
     {
@@ -103,33 +113,64 @@ class SecurityController extends AbstractController
         // Si l'utilisateur n'existe pas
         if ($user === null) {
             // On affiche une erreur
-            $this->addFlash('danger', 'Token Inconnu');
-            return $this->redirectToRoute('app_login');
+            $this->addFlash('danger', 'Utilisateur inconnu');
+            return $this->redirectToRoute('app_forgotten_password');
         }
 
         // Si le formulaire est envoyé en méthode post
         if ($request->isMethod('POST')) {
             // On supprime le token
             $user->setResetToken(null);
-
+            
             // On chiffre le mot de passe
             $user->setPassword($passwordEncoder->hashPassword($user, $request->request->get('password')));
-
             // On stocke
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // On crée le message flash
-            $this->addFlash('success', 'Mot de passe mis à jour.');
+            $this->addFlash('success', 'Mot de passe mis à jour pour ' . $user->getEmail());
 
             // On redirige vers la page de connexion
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_forgotten_password');
 
         }else {
             // Si on n'a pas reçu les données, on affiche le formulaire
-            return $this->render('security/reset_password.html.twig', ['token' => $token]);
+            return $this->render('security/reset_password.html.twig', [
+                'token' => $token,
+                'user' => $user,
+            ]); 
+        }
+    }
+
+    /**
+     * @Route("/ajout-nouvel-utilisateur", name="app_register")
+     * 
+     * @IsGranted("ROLE_SUPADMIN")
+     */
+    public function register(Request $request, UserPasswordHasherInterface $passwordHashed): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegisterUserFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setRoles(['ROLE_ADMIN']);
+            $user->setPassword($passwordHashed->hashPassword($user, $user->getPassword()));
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            // generate a success message
+            $this->addFlash('success','Un nouvel utilisateur a été enregistré');
+            // redirect to current page
+            return $this->redirectToRoute('app_register');
         }
 
+        return $this->render('security/register_user.html.twig', [
+            'registerForm' => $form->createView()
+        ]);
     }
 }
