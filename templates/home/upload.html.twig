@@ -9,11 +9,11 @@
             <!-- tickets reseaux -->
 			<div class="row">
 				<div class="col-12">
-					<div class="card card-primary">
-						<div class="card-header">
+					<div class="card card-secondary">
+						<div class="card-header text-center">
 							<h3 class="card-title w-100">
 								<a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
-									<center><strong>Tickets réseaux</strong></center>
+									<strong>Tickets réseaux</strong>
 								</a>
 							</h3>
 						</div>
@@ -25,11 +25,9 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <div class="card card-container card-outline card-primary">
-                                                            <div class="card-header d-flex">
-                                                                <h3 class="card-title m-auto">
-                                                                    <strong>Tickets Proxi Ouverts (Fichier Excel)</strong>
-                                                                </h3>
+                                                        <div class="card card-outline card-secondary">
+                                                            <div class="card-header text-center">
+                                                               <strong>Tickets Proxi Ouverts (Fichier Excel)</strong>
                                                             </div>
                                                             <!-- /.card-header -->
                                                             <div class="card-body card-content">
@@ -51,11 +49,9 @@
                                                     <!-- /.card -->
                                                     <div class="col-md-6">
                                                         <!-- general form elements -->
-                                                        <div class="card card-container card-outline card-primary">
-                                                            <div class="card-header d-flex">
-                                                                <h3 class="card-title m-auto">
-                                                                    <strong>Dernière mise à jour</strong>
-                                                                </h3>
+                                                        <div class="card card-outline card-secondary text-center">
+                                                            <div class="card-header">
+                                                                <strong>Dernière mise à jour</strong>
                                                             </div>
                                                             <!-- /.card-header -->
                                                             {% if lastUpdatedDateReseau[0]["maxDate"] is same as("now"|date("d/m/Y")) %}
@@ -178,11 +174,11 @@
             <!-- tickets ibm -->
             <div class="row">
                 <div class="col-12">
-                    <div class="card card-primary">
-                        <div class="card-header">
+                    <div class="card card-secondary">
+                        <div class="card-header text-center">
                             <h3 class="card-title w-100">
                                 <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
-                                    <center><strong>Tickets IBM</strong></center>
+                                    <strong>Tickets IBM</strong>
                                 </a>
                             </h3>
                         </div>
@@ -195,11 +191,9 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <!-- general form elements -->
-                                                        <div class="card card-container card-outline card-primary">
-                                                            <div class="card-header d-flex">
-                                                                <h3 class="card-title m-auto">
-                                                                    <center><strong>Tickets IBM Ouverts (Fichier Excel)</strong></center>
-                                                                </h3>
+                                                        <div class="card card-container card-outline card-secondary text-center">
+                                                            <div class="card-header">
+                                                                <strong>Tickets IBM Ouverts (Fichier Excel)</strong>
                                                             </div>
                                                             <!-- /.card-header -->
                                                             <div class="card-body card-content">
@@ -221,11 +215,9 @@
                                                     <!-- /.card -->
                                                     <div class="col-md-6">
                                                         <!-- general form elements -->
-                                                        <div class="card card-container card-outline card-primary">
-                                                            <div class="card-header d-flex">
-                                                                <h3 class="card-title m-auto">
-                                                                    <strong>Dernière mise à jour</strong>
-                                                                </h3>
+                                                        <div class="card card-container card-outline card-secondary text-center">
+                                                            <div class="card-header">
+                                                                <strong>Dernière mise à jour</strong>
                                                             </div>
                                                             <!-- /.card-header -->
                                                             {% if lastUpdatedDateIbm[0]["maxDate"] is same as("now"|date("d/m/Y")) %}

@@ -209,7 +209,7 @@ $(function () {
     });
 
     $('#tabstores').DataTable({
-        dom: 'lftrip',
+        dom: 'lfrBtip',
         lengthMenu:[5,10,15,20],
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.10.22/i18n/French.json"
