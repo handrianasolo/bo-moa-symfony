@@ -8,15 +8,28 @@
 {% endblock %}
 
 {% block body %}
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="{{path('ibm_manage')}}">Gestion des tickets</a></li>
+                        <li class="breadcrumb-item active">Détails des tickets IBM ouverts depuis <strong>plus d'un mois</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
     <!-- Main content -->
     <div class="content">
         <!-- Liste of all ticket -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-outline card-info">
-                    <div class="card-header d-flex">
-                        <h3 class="card-title m-auto">Détails des tickets IBM ouverts <strong>plus d'un mois</strong></h3>
-                    </div>
                     <div class="card-body">
                         <table id="tabticketsdetails" class="table display table-striped w-100">
                             <thead>

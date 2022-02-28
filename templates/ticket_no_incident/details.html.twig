@@ -8,6 +8,22 @@
 {% endblock %}
 
 {% block body %}
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="{{path('reseau_manage')}}">Gestion des tickets</a></li>
+                        <li class="breadcrumb-item active">Détails du magasin {{ticketNoIncident.codeMagasin}} (sans incident)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
